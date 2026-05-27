@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.Player;
-import Selection.PlayerType;
+import Model.PlayerType;
 import Utils.Acceptable;
 import Utils.ViewHandler;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package Selection;
+package Model;
 
 import Controller.ClubManager;
 import Controller.Manager;

@@ -1,5 +1,7 @@
 package Utils;
 
+import CallBackInterface.LimitMethodAccessManager;
+
 /**
  *
  * @author admin
@@ -7,7 +9,11 @@ package Utils;
 public interface Acceptable {
        public final String   Player_ID  = "^[Pp]\\d{4}$"    ;
        
-       public final String   NAME_VALID  = "^[A-Za-z]+$"    ;
+       public final String   NAME_VALID  = "^[A-Z a-z]+$"    ;
+       
+       public final String  CLUB_NAME_VALID = "^[A-Za-z0-9 ]+$"; 
+       
+       public final String  SPONSOR_BRAND_VALID = "^[A-Za-z0-9 -,$._]+$";
        
        public final String   DOUBLE_VALID = "^([-])?\\d+([.,]\\d+)?$"  ;
        

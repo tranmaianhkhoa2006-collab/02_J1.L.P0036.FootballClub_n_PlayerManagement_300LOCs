@@ -3,11 +3,11 @@ package Run;
 import Controller.ClubManager;
 import Controller.Manager;
 import Model.Club;
-import Model.ClubPlayerInterface;
+import CallBackInterface.ClubPlayerInterface;
 import Model.Player;
-import Selection.ListType;
-import Selection.MenuHeaderType;
-import Selection.PlayerType;
+import Model.ListType;
+import Model.MenuHeaderType;
+import Model.PlayerType;
 import Utils.MenuContainer;
 import Utils.ViewHandler;
 

@@ -1,15 +1,16 @@
 package Controller;
 
-import Selection.ListType;
+import Model.ListType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import CallBackInterface.LimitMethodAccessManager;
 
 /**
  *
  * @author admin
  */
-public abstract class Manager<E> {
+public abstract class Manager<E> implements LimitMethodAccessManager{
     private HashMap<String, E> dataManager = new HashMap<>();
     
     public boolean add(String id,E data){

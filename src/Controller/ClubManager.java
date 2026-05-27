@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.Club;
-import Model.ClubPlayerInterface;
+import CallBackInterface.ClubPlayerInterface;
 import Utils.ViewHandler;
 import java.util.ArrayList;
 import java.util.Collection;

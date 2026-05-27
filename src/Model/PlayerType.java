@@ -1,4 +1,4 @@
-package Selection;
+package Model;
 
 import Model.Defender;
 import Model.Forward;
@@ -14,32 +14,32 @@ import Model.Winger;
 public enum PlayerType {
         WINGER("Winger") {
             @Override
-            public Player createPlayer(String playerId, String playerName) {
-               return new Winger(playerId, playerName);
+            public Player createPlayer() {
+               return new Winger();
             }
         },
         DEFENDER("Defender") {
             @Override
-            public Player createPlayer(String playerId, String playerName) {
-               return new Defender(playerId, playerName);
+            public Player createPlayer() {
+               return new Defender();
             }
         },
         GOALKEEPER("GoalKeeper") {
             @Override
-            public Player createPlayer(String playerId, String playerName) {
-                   return new GoalKeeper(playerId, playerName);
+            public Player createPlayer() {
+                   return new GoalKeeper();
             }
           },
         MIDFIELDER("MidFielder") {
             @Override
-            public Player createPlayer(String playerId, String playerName) {
-              return new MidFielder(playerId, playerName);
+            public Player createPlayer() {
+              return new MidFielder();
             }
         },
         FORWARD("Forward") {
             @Override
-            public Player createPlayer(String playerId, String playerName) {
-             return new Forward(playerId, playerName);
+            public Player createPlayer() {
+             return new Forward();
             }
         };
        
@@ -52,7 +52,7 @@ public enum PlayerType {
         public String getPosition(){
             return position;
         }
-        public abstract Player createPlayer(String playerId, String playerName);
+        public abstract Player createPlayer();
         
         public static PlayerType searchPlayerType(String playerType){
             if(playerType.isEmpty())

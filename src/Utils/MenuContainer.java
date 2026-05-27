@@ -1,6 +1,6 @@
 package Utils;
 
-import Selection.MenuHeaderType;
+import Model.MenuHeaderType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,11 +70,11 @@ public class MenuContainer {
      
       public MenuContainer createUpdateClubMenu(){
          menuOption.clear();
-         menuOption.add("Return to menu");
+         menuOption.add("Confirm information and return to menu");
          menuOption.add("Update club name");
          menuOption.add("Update sponsor brand");
          menuOption.add("Update budget");
-         menuOption.add("Change student id to update");
+         menuOption.add("Confirm information and change club id to update");
          return menuContainerInstance;
      }
      

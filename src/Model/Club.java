@@ -12,13 +12,6 @@ public class Club {
     private String sponsorBrand;
     private double budget;
     private TreeMap<Integer,String> dataOfShirtNumber = new TreeMap<>();
-
-    public Club(String clubId, String clubName, String sponsorBrand) {
-        this.clubId = clubId;
-        this.clubName = clubName;
-        this.sponsorBrand = sponsorBrand;
-    }
-
     
     public String getClubId() {
         return clubId;
@@ -102,8 +95,8 @@ public class Club {
         return clubId+", "+clubName+", "+sponsorBrand+", "+budget;
     }
    
-    public static Club createNewClub(String clubId,String clubName,String sponsorBrand){
-        return new Club(clubId, clubName, sponsorBrand);
+    public static Club createNewClub(){
+        return new Club();
     }
     
 }

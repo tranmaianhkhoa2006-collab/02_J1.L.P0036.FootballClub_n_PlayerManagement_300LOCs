@@ -1,8 +1,8 @@
 package Utils;
 
 
-import Selection.MenuHeaderType;
-import Selection.PlayerType;
+import Model.MenuHeaderType;
+import Model.PlayerType;
 import java.util.Scanner;
 
 /**

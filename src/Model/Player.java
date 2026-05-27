@@ -1,6 +1,6 @@
 package Model;
 
-import Selection.PlayerType;
+import CallBackInterface.ClubPlayerInterface;
 
 /**
  *
@@ -14,11 +14,7 @@ public abstract class Player {
     private ClubPlayerInterface apiClubManager;
 
 
-    public Player(String playerId,String playerName){
-        this.playerId= playerId;
-        this.playerName=playerName;
-        apiClubManager = null;
-        this.shirtNumber = 0;
+    public Player(){
     }
     
     public String getPlayerId() {
@@ -91,8 +87,8 @@ public abstract class Player {
          return playerId+", "+playerName+", "+getPosition()+", "+ shirtNumber;
     }
     
-    public static Player getNewPlayer(PlayerType playerType,String playerId, String playerName){
-        return playerType.createPlayer(playerId, playerName);
+    public static Player getNewPlayer(PlayerType playerType){
+        return playerType.createPlayer();
         //null = invalid position
     }
 }
