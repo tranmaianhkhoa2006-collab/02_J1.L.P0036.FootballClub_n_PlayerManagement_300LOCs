@@ -46,6 +46,7 @@ public class ClientTest {
         dataOfPlayers.add(player1.getPlayerId(), player1);
         dataOfPlayers.add(player2.getPlayerId(), player2);
         
+        
         dataOfPlayers.show();
         dataOfClubs.show();
        

@@ -65,7 +65,12 @@ public class Club {
     }
     
     public boolean addShirtNumber(int number,String id){
-        return dataOfShirtNumber.put(number, id)!=null;
+        if(!this.isContainShirtNumber(number)){
+            this.dataOfShirtNumber.put(number, id);
+            return true;
+        }
+         return false;
+            
     }
     
      public boolean deleteShirtNumber(int shirtNumber){
@@ -74,8 +79,7 @@ public class Club {
       
     public boolean updateShirtNumber(int oldNums, int newNums){
        boolean isContainOldNumsAndIsNewNumsEmptyInClub = 
-             this.isContainShirtNumber(oldNums) && 
-               !this.isContainShirtNumber(newNums);
+             this.isContainShirtNumber(oldNums) && !this.isContainShirtNumber(newNums);
        
        if(isContainOldNumsAndIsNewNumsEmptyInClub){
                 String thisPlayerID = this.dataOfShirtNumber.remove(oldNums);
