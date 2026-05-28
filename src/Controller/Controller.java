@@ -13,6 +13,9 @@ import Utils.ViewHandler;
  *
  * @author admin
  */
+
+// pathFile for local git: d:\\javaBaiTap\\LabTwo_FootballClub\\src
+
 public class Controller {
     private Manager playerManager = Manager.getNewManagerList(ListType.PLAYER_MANAGER);
     private Manager clubManager = Manager.getNewManagerList(ListType.CLUB_MANAGER);
@@ -25,7 +28,52 @@ public class Controller {
             );
             int option = Inputter.inputChoice("Input your option: ", 0, MenuContainer.getInstance().getNumberOfOptions()-1);
             switch(option){
-                
+                case 0:
+                    saveBeforeExiting();
+                   return;
+                case 1:
+                    this.listOfAllClub();
+                    break;
+                case 2:
+                    this.addNewClub();
+                    break;
+                case 3:
+                    this.searchClubByID();
+                    break;
+                case 4:
+                    this.updateClubByID();
+                    break;
+                case 5:
+                    
+                    break;
+                case 6:
+                    
+                    break;
+                case 7:
+                    
+                    break;
+                case 8:
+                    
+                    break;
+                case 9:
+                    
+                    break;
+                case 10:
+                    
+                    break;
+                case 11:
+                    
+                    break;
+                case 12:
+                    
+                    break;
+                case 13:
+                    
+                    break;
+                case 14:
+                    
+                    break;
+                    
             }
         }
     }
@@ -68,6 +116,7 @@ public class Controller {
         while(true);
         return null;
     }
+    
     public void addNewClub(){
         String clubId = inputIdAndCheckDuplicate();
          if(clubId.isEmpty())
@@ -95,7 +144,6 @@ public class Controller {
         }
         
     }
-    
     
     public void searchClubByID(){
         String clubId =inputIdAndCheckDuplicate();
@@ -142,23 +190,55 @@ public class Controller {
                     MenuContainer.getInstance().createUpdateClubMenu().getMenu(), 
                     MenuContainer.getHeader(MenuHeaderType.UPDATE_CLUB_MENU_HEADER)
             );
-            int choice = inputChoice("Input your option", 0, MenuContainer.getInstance().getNumberOfOptions()-1);
+            int choice = inputChoice("Input your option: ", 0, MenuContainer.getInstance().getNumberOfOptions()-1);
             switch(choice){
                 case 0:
                     clubManager.update(tempClub.getClubId(), tempClub);
-                    break;
+                    return;
                 case 1:
+                    updateClubName(tempClub);
                     break;
                 case 2:
+                    updateClubSponsorBrand(tempClub);
                     break;
                 case 3:
+                    updatebudget(tempClub);
                     break;
                 case 4:
                     clubId = inputIdAndCheckDuplicate();
                     break;
                 }
+               Inputter.inputString("Press enter to continue!");
+               ViewHandler.fakeClearScreen();
             }
         }
     
+    public void updateClubName(Club club){
+         String newName = Inputter.inputStringAndLoopForUpdate("Input new club name: ", Acceptable.CLUB_NAME_VALID);
+         if(newName.isEmpty())
+             return;
+         
+         club.setClubName(newName);
+         
+    }
+    
+    public void updateClubSponsorBrand(Club club){
+        String newSponsorBrand = Inputter.inputStringAndLoopForUpdate("Input new sponsor brand: ", Acceptable.SPONSOR_BRAND_VALID);
+        if(newSponsorBrand.isEmpty())
+            return;
+        
+        club.setSponsorBrand(newSponsorBrand);
+        
+    }
+    
+    public void updatebudget(Club club){
+        ViewHandler.print("If you change your mind, please don't input anything and press enter\n");
+        double newBudget = Inputter.inputDoubleForUpdate("Input new budget: ");
+        if(newBudget == -1)
+            return;
+        
+        club.setBudget(newBudget);
+        
+    }  
     
 }

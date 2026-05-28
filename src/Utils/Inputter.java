@@ -49,6 +49,46 @@ public class Inputter {
          return returnValue;
      }
      
+       public static String inputStringAndLoopForUpdate(String mess, String pattern){
+        String returnValue;
+        boolean isValidString = true;
+        int count = 0;
+         do{
+       
+                count++;
+            
+               if(count>3){
+                   ViewHandler.displayMenu(
+                           MenuContainer.getInstance().createYesNoMenu().getMenu(),
+                           MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
+                   );
+                   
+                   int choice = inputChoice("Do you want of continue?: ",0, 1);
+                   
+                  switch(choice){
+                      case 0:
+                          count = 0;
+                          break;
+                      case 1:
+                          return null;
+                  }
+                  
+               }
+            
+            returnValue = inputString(mess);
+            if(returnValue.isEmpty())
+                return null;
+            
+            isValidString = Acceptable.isValid(returnValue, pattern);
+                    
+            if(!isValidString && count <=3)
+                   ViewHandler.printError("Please enter again!\n");
+             
+        }
+        while(!isValidString);
+         
+         return returnValue;
+     }
      
      public static int inputInteger(String mess){
          String returnValue;
@@ -68,6 +108,22 @@ public class Inputter {
          boolean isValid;
          do{
              returnValue = inputString(mess);
+             isValid = Acceptable.isValid(returnValue,Acceptable.DOUBLE_VALID);
+             if(!isValid)
+                    ViewHandler.printError("Please enter again!\n");
+         }
+         while(!isValid);
+         return Double.parseDouble(returnValue);
+     }
+     
+      public static double inputDoubleForUpdate(String mess){
+         String returnValue;
+         boolean isValid;
+         do{
+             returnValue = inputString(mess);
+             if(returnValue.isEmpty())
+                 return -1;
+             
              isValid = Acceptable.isValid(returnValue,Acceptable.DOUBLE_VALID);
              if(!isValid)
                     ViewHandler.printError("Please enter again!\n");
