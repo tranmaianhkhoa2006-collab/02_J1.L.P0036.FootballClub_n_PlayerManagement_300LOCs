@@ -38,7 +38,7 @@ public class Controller {
         clubManager.show();
     }
     
-    public String inputIdAndCheckDuplicate(){
+    private String inputIdAndCheckDuplicate(){
          int count = 0;
          String clubId;
         do{
