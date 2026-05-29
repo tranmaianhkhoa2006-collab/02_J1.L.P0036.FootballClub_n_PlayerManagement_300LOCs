@@ -408,7 +408,70 @@ public enum OptionProcessor {
     UPDATE_PLAYER_BY_ID {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            while(true){
+              String id = Inputter.inputStringAndLoop("Input player id to search: ","Invalid player ID",Acceptable.PLAYER_ID_VALID);
+              if(id==null)
+                 return;
+            
+         
+                Player player = playerManager.search(id);
+                if(player==null){
+                    ViewHandler.print("This player does not exist!");
+                    return;
+                }
+                
+                ViewHandler.displayMenu(
+                        MenuContainer.getInstance().createUpdatePlayerMenu().getMenu(),
+                        MenuContainer.getHeader(MenuHeaderType.UPDATE_Player_MENU_HEADER)
+                );
+                
+                int choice = Inputter.inputInteger("Input your option: ","Invalid option!\nPlease re-enter!", 0, 1);
+                switch(choice){
+                    case 0:
+                        return;
+                    case 1:
+                        player = updatePlayerName(player);
+                        break;
+                    case 2:
+                        player = updatePlayerPosition(player);
+                        break;
+                    case 3:
+                        player = updatePlayerShirtNumber(player);
+                        break;
+                }
+                if(choice != MenuContainer.getInstance().getNumberOfOptions()-1)
+                    playerManager.update(player.getPlayerId(), player);
+            }
+        }
+        
+        public Player updatePlayerName(Player player){
+            String name = Inputter.inputStringAndLoop("Input new name: ","Invalid name\nPlease enter again!", Acceptable.PLAYER_NAME_VALID);
+            if(name==null)
+                return player;
+            
+            return player.setPlayerName(name);
+            
+        }
+        
+        public Player updatePlayerPosition(Player player){
+            PlayerType playerType = Inputter.inputPlayerType("Input position: ");
+            if(playerType == null)
+                return player;
+            
+            int shirtNumber = player.getShirtNumber();
+            player.getApiClubManager().deleteShirtNumber(player.getClubId(), shirtNumber);
+            Player updatedPlayer =Player.getNewPlayer(playerType)
+                                            .setPlayerId(player.getPlayerId())
+                                            .setPlayerName(player.getPlayerName())
+                                            .setClubId(player.getPosition())
+                                            .setShirtNumber(shirtNumber);
+            
+           return updatedPlayer; 
+        }
+        
+        public Player updatePlayerShirtNumber(Player player){
+            int newShirtNumber = Inputter.inputInteger("Input new shirt number: ","Please input a valid shirt number!(1-99)", 1, 99);
+            return player.setShirtNumber(newShirtNumber);
         }
     },
     
