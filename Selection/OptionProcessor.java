@@ -73,7 +73,7 @@ public enum OptionProcessor {
             );
             
             if (isAddSuccess) {
-                ViewHandler.print("Added club successfully");
+                ViewHandler.print("Added club successfully\n");
             }
 
         }
@@ -100,7 +100,7 @@ public enum OptionProcessor {
                 );
             } 
             else {
-                ViewHandler.print("This club does not exist!");
+                ViewHandler.print("This club does not exist!\n");
             }
         }
     },
@@ -115,7 +115,7 @@ public enum OptionProcessor {
         
         Club foundClub = (Club) clubManager.search(clubId);
         if(foundClub == null){
-            ViewHandler.print("This club does not exist!");
+            ViewHandler.print("This club does not exist!\n");
             return;
         }
         
@@ -158,7 +158,7 @@ public enum OptionProcessor {
                     break;
                 }
                 if(choice == 4 && clubId == null)
-               Inputter.inputString("Press enter to continue!");
+               Inputter.inputString("Press enter to continue!\n");
                ViewHandler.fakeClearScreen();
             }
         }
@@ -205,7 +205,7 @@ public enum OptionProcessor {
     LIST_ALL_CLUB_BY_GAIN_ATMOST_BUDGET{
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            ViewHandler.print("Press -1 to return!");
+            ViewHandler.print("Press -1 to return!\n");
             double budget = Inputter.inputDouble("Input budget: ",0,
                     "Please enter a valid budget");
             if(budget == -1)
@@ -280,7 +280,7 @@ public enum OptionProcessor {
             
             tempCasting.add(id, player);
             
-            ViewHandler.print("Add player successfully!");
+            ViewHandler.print("Add player successfully!\n");
             
         }
         
@@ -311,7 +311,7 @@ public enum OptionProcessor {
                   
                   boolean thisNumberHasBeenTaken = clubManagerMethodInterface.isContainShirtNumber(clubId, shirtNumber);
                   if(thisNumberHasBeenTaken)
-                      ViewHandler.print("This shirt number already exists in this club!”");
+                      ViewHandler.print("This shirt number already exists in this club!\n");
                   else 
                       break;
                  
@@ -356,13 +356,13 @@ public enum OptionProcessor {
     REMOVE_PLAYER_BY_ID {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            String id = Inputter.inputStringAndLoop("Input id to delete", "Please input a valid id!", Acceptable.PLAYER_ID_VALID);
+            String id = Inputter.inputStringAndLoop("Input id to delete: ", "Please input a valid id!", Acceptable.PLAYER_ID_VALID);
             if(id == null)
                 return;
             
             Player player = playerManager.search(id);
             if(player == null){
-                ViewHandler.print("This player does not exist!");
+                ViewHandler.print("This player does not exist!\n");
                 return;
             }
             
@@ -384,7 +384,7 @@ public enum OptionProcessor {
                     deletePlayer(playerManager, player);
                     break;
                 case 1:
-                    ViewHandler.print("You denied to delete this player!");
+                    ViewHandler.print("You denied to delete this player!\n");
                     return;
             }
             
@@ -398,7 +398,7 @@ public enum OptionProcessor {
                  ViewHandler.print("Deleted player successfully!\n");
              }
              else{
-                 ViewHandler.printError("Can not delete shirt number in player club!\nPlease contact developer for supporting!");
+                 ViewHandler.printError("Can not delete shirt number in player club!\nPlease contact developer for supporting!\n");
              }
         }
         

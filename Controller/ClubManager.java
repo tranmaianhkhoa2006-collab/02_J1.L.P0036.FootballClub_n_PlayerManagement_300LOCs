@@ -77,6 +77,11 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
     }
     
     public void show(Collection<Club> filterData){  
+        if(filterData.isEmpty()){
+            ViewHandler.print("There is no data or there is no club matches conditions to view!\n");
+            return;
+        }
+        
         ViewHandler.print(ClubManager.TABLE_HEADER);
         for(Club club: filterData){   
             ViewHandler.print(

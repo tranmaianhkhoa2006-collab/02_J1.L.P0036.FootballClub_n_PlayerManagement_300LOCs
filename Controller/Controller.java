@@ -12,7 +12,7 @@ import Utils.ViewHandler;
  * @author admin
  */
 
-// pathFile for local git: d:\\javaBaiTap\\LabTwo_FootballClub\\src
+// pathFile for local git: d:\\javaBaiTap\\Lab211_Lab2\\src
 
 public class Controller {
     private Manager playerManager = Manager.getNewManagerList(ListType.PLAYER_MANAGER);
@@ -20,6 +20,7 @@ public class Controller {
     
     public void startProgram(){
         while(true){
+            ViewHandler.fakeClearScreen();
             ViewHandler.displayMenu(
                     MenuContainer.getInstance().createMainMenu().getMenu(), 
                     MenuContainer.getHeader(MenuHeaderType.MAIN_MENU_HEADER)
@@ -27,9 +28,14 @@ public class Controller {
             int option = Inputter.inputInteger("Input your option: ","Invalid choice, please enter again!" ,0, MenuContainer.getInstance().getNumberOfOptions()-1);
             processOption(option);
             boolean isClientWantToLeave = option == 0;
+            Inputter.inputString("Please enter to continue");
+            ViewHandler.fakeClearScreen();
             
-            if(isClientWantToLeave)
-                 return;
+            if(isClientWantToLeave){
+                ViewHandler.print("See you again!");
+                 return; 
+            }
+            
         }
         
     }

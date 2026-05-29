@@ -21,6 +21,7 @@ public class PlayerManager extends Manager<Player>{
     
     @Override
     public void show() {
+        
         this.show(super.getReadOnlyManagerList());
     }
     
@@ -65,9 +66,14 @@ public class PlayerManager extends Manager<Player>{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public void show(Collection<Player> data){
+    public void show(Collection<Player> filterData){
+        if(filterData.isEmpty()){
+            ViewHandler.print("There is no data or there is no player matches conditions to view!\n");
+            return;
+        }
+        
         ViewHandler.print(TABLE_HEADER);
-        for(Player player: data){
+        for(Player player: filterData){
             ViewHandler.print(
                     ViewHandler.attributeOfPlayerList(
                             player.getPlayerId(),

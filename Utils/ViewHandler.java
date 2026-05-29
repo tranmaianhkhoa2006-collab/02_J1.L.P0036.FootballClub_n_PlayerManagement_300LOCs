@@ -28,13 +28,13 @@ public class ViewHandler {
      //return row of studentList with player info or return attribute for its table header
      public static String attributeOfPlayerList(String playerId, String playerName, String clubName, String shirtNumber,String position) {
          String returnValue =
-                 String.format("| %-13s| %-23s| %-50s| %-13s| %-20s|", playerId,playerName,clubName,shirtNumber,position);
+                 String.format("| %-13s| %-35s| %-40s| %-13s| %-20s|", playerId,playerName,clubName,shirtNumber,position);
          return returnValue;
      }
      
      public static String attributeOfClubList(String clubId, String clubName, String sponsorBrand,String budget,String numberOfPlayers){
          String returnValue =
-                 String.format("| %-10s| %-25s| %-25s| %-20s| %-20s|",clubId,clubName,sponsorBrand,budget,numberOfPlayers);
+                 String.format("| %-10s| %-40s| %-25s| %-20s| %-20s|",clubId,clubName,sponsorBrand,budget,numberOfPlayers);
          return returnValue;
      }
      

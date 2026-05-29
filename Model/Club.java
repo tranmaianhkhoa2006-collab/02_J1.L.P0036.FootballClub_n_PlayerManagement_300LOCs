@@ -1,6 +1,8 @@
 package Model;
 
+import Utils.ViewHandler;
 import java.util.TreeMap;
+import javax.swing.text.View;
 
 /**
  *
@@ -18,7 +20,7 @@ public class Club {
     }
 
     public Club setClubId(String clubId) {
-        this.clubId = clubId;
+        this.clubId = clubId.toUpperCase();
         return this;
     }
 
@@ -27,7 +29,7 @@ public class Club {
     }
 
     public Club setClubName(String clubName) {
-        this.clubName = clubName;
+        this.clubName = ViewHandler.nameFormatter(clubName);
         return this;
     }
 
@@ -36,7 +38,7 @@ public class Club {
     }
 
     public Club setSponsorBrand(String sponsorBrand) {
-        this.sponsorBrand = sponsorBrand;
+        this.sponsorBrand = ViewHandler.nameFormatter(sponsorBrand);
         return this;
     }
 
