@@ -24,7 +24,7 @@ public class Controller {
                     MenuContainer.getInstance().createMainMenu().getMenu(), 
                     MenuContainer.getHeader(MenuHeaderType.MAIN_MENU_HEADER)
             );
-            int option = Inputter.inputChoice("Input your option: ", 0, MenuContainer.getInstance().getNumberOfOptions()-1);
+            int option = Inputter.inputInteger("Input your option: ","Invalid choice, please enter again!" ,0, MenuContainer.getInstance().getNumberOfOptions()-1);
             processOption(option);
             boolean isClientWantToLeave = option == 0;
             

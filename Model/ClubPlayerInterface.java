@@ -9,4 +9,5 @@ public interface ClubPlayerInterface {
      boolean addShirtNumber(String clubId,String playerId,int nums);
      boolean updateShirtNumber(String clubId,int oldNums, int newNums);
      boolean deleteShirtNumber(String clubId,int nums);
+     boolean isContainShirtNumber(String clubId, int nums);
 }

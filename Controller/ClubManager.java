@@ -91,6 +91,16 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
             );
         }
     }
+
+    @Override
+    public boolean isContainShirtNumber(String clubId, int nums) {
+        Club club = this.search(clubId);
+        if(club ==null)
+            return false;
+        
+        return club.isContainShirtNumber(nums);
+        
+    }
     
     
 }
