@@ -62,19 +62,20 @@ public class Inputter {
                            MenuContainer.getInstance().createYesNoMenu().getMenu(),
                            MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
                    );
-                   
-                   int choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
-                   
-                  switch(choice){
+                int choice=-1;
+               while(choice !=0 || choice !=1){
+                   choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
+                   switch(choice){
                       case 0:
                           count = 0;
                           break;
                       case 1:
                           return null;
+                      default:
                   }
                   
                }
-            
+            }
             returnValue = inputString(mess);
             if(returnValue.isEmpty())
                 return null;
@@ -116,16 +117,21 @@ public class Inputter {
                            MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
                    );
                    
-                   int choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
+                   int choice=-1;
+               while(choice !=0 || choice !=1){
+                   choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
+                   switch(choice){
+                            case 0:
+                                attempt = 0;
+                                break;
+                            case 1:
+                                return min-1;
+                            default:
+                                ViewHandler.printError("Invalid choice, please enter again!");
+                                break;
+                        }
+                   }
                    
-                  switch(choice){
-                      case 0:
-                          attempt = 0;
-                          break;
-                      case 1:
-                          return min-1;
-                  }
-                  
                }
                
              returnValue = Inputter.inputInteger(mess,"Please input a number!");
@@ -192,7 +198,7 @@ public class Inputter {
          boolean isValidChoice = false;
          do{
               returnValue = Inputter.inputInteger(mess,"Please input number!");
-              isValidChoice = Acceptable.isDigitInRange(returnValue, min, max);
+              isValidChoice = Acceptable.isDigitInRange(returnValue, min-1, max);
               
               if(!isValidChoice)
                   ViewHandler.printError(errorMess+"\n");

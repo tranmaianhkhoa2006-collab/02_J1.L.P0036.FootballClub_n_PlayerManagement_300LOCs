@@ -38,7 +38,7 @@ public enum OptionProcessor {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
             String clubId = inputIdAndDuplicateCheck(clubManager,Acceptable.CLUB_ID_VALID,
-                    "Please enter a valid club id!\nFormat : CL-XXXX Where X is a number from 0 -> 9");
+                    "This club id already exist!");
             
             if (clubId == null) {
                 return;
@@ -108,59 +108,68 @@ public enum OptionProcessor {
     UPDATE_CLUB_BY_ID {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-        String clubId = Inputter.inputStringAndLoop("Input club id: ",
-                "Please enter a valid club id!\nFormat : CL-XXXX Where X is a number from 0 -> 9", Acceptable.CLUB_ID_VALID);
-        if(clubId == null)
-            return;
-        
-        Club foundClub = (Club) clubManager.search(clubId);
-        if(foundClub == null){
-            ViewHandler.print("This club does not exist!\n");
-            return;
-        }
-        
-        Club tempClub = Club.createNewClub().
-                                            setClubId(clubId).
-                                            setClubName(foundClub.getClubName()).
-                                            setSponsorBrand(foundClub.getSponsorBrand()).
-                                            setBudget(foundClub.getBudget());
-        
-        while(true){
-            String clubInfo = tempClub.toString();
-            ViewHandler.print(
-                    ViewHandler.lineBreak(clubInfo.length())+
-                            clubInfo+
-                    ViewHandler.lineBreak(clubInfo.length())
-            );
-            
-            ViewHandler.displayMenu(
-                    MenuContainer.getInstance().createUpdateClubMenu().getMenu(), 
-                    MenuContainer.getHeader(MenuHeaderType.UPDATE_CLUB_MENU_HEADER)
-            );
-            int choice = inputInteger("Input your option: ","Invalid choice, please enter again!",
-                                                      0, MenuContainer.getInstance().getNumberOfOptions()-1);
-            switch(choice){
-                case 0:
-                    clubManager.update(tempClub.getClubId(), tempClub);
+            while (true) {
+                String clubId = Inputter.inputStringAndLoop("Input club id: ",
+                        "Please enter a valid club id!\nFormat : CL-XXXX Where X is a number from 0 -> 9", Acceptable.CLUB_ID_VALID);
+                if (clubId == null) {
                     return;
-                case 1:
-                    updateClubName(tempClub);
-                    break;
-                case 2:
-                    updateClubSponsorBrand(tempClub);
-                    break;
-                case 3:
-                    updatebudget(tempClub);
-                    break;
-                case 4:
-                    clubId = inputIdAndDuplicateCheck(clubManager,Acceptable.CLUB_ID_VALID,
-                            "Please enter a valid club id!\nFormat : CL-XXXX Where X is a number from 0 -> 9");
-                    break;
                 }
-                if(choice == 4 && clubId == null)
-               Inputter.inputString("Press enter to continue!\n");
-               ViewHandler.fakeClearScreen();
+
+                Club foundClub = (Club) clubManager.search(clubId);
+                if (foundClub == null) {
+                    ViewHandler.print("This club does not exist!\n");
+                    return;
+                }
+
+                Club tempClub = Club.createNewClub().
+                        setClubId(clubId).
+                        setClubName(foundClub.getClubName()).
+                        setSponsorBrand(foundClub.getSponsorBrand()).
+                        setBudget(foundClub.getBudget());
+
+                while (true) {
+                    String clubInfo = tempClub.toString();
+                    ViewHandler.print(
+                            ViewHandler.lineBreak(clubInfo.length())
+                            + clubInfo
+                            + ViewHandler.lineBreak(clubInfo.length())
+                    );
+
+                    ViewHandler.displayMenu(
+                            MenuContainer.getInstance().createUpdateClubMenu().getMenu(),
+                            MenuContainer.getHeader(MenuHeaderType.UPDATE_CLUB_MENU_HEADER)
+                    );
+                    int choice = inputInteger("Input your option: ", "Invalid choice, please enter again!",
+                            0, MenuContainer.getInstance().getNumberOfOptions() - 1);
+                    switch (choice) {
+                        case 0:
+                            clubManager.update(tempClub.getClubId(), tempClub);
+                            return;
+                        case 1:
+                            updateClubName(tempClub);
+                            break;
+                        case 2:
+                            updateClubSponsorBrand(tempClub);
+                            break;
+                        case 3:
+                            updatebudget(tempClub);
+                            break;
+                        case 4:
+                            break;
+                        default:
+                            ViewHandler.printError("Invalid choice!\n");
+                    }
+                    
+                    Inputter.inputString("Press enter to continue!\n");
+                    ViewHandler.fakeClearScreen();
+                    
+                    if(choice != MenuContainer.getInstance().getNumberOfOptions()-1)
+                        break;
+                        
+                 
+                }
             }
+            
         }
 
         public void updateClubName(Club club) {
@@ -276,9 +285,8 @@ public enum OptionProcessor {
                                                                                        .setClubId(clubId)
                                                                                        .setShirtNumber(shirtNumber);
             
-            PlayerManager tempCasting = (PlayerManager)playerManager;
             
-            tempCasting.add(id, player);
+            playerManager.add(id, player);
             
             ViewHandler.print("Add player successfully!\n");
             
@@ -297,17 +305,23 @@ public enum OptionProcessor {
                            MenuContainer.getInstance().createYesNoMenu().getMenu(),
                            MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
                    );
-                   
-                   int choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
-                  
-                   if(choice == 1)
-                       return 0;
-                   else
-                       count = 0;
-               }
+                     int choice = -1;
+                     while (choice != 0 && choice != 1) {
+                         choice = inputInteger("Do you want of continue?: ", "Invalid choice, please enter again!", 0, 1);
+
+                         switch (choice) {
+                             case 0:
+                                 count = 0;
+                             case 1:
+                                 return 0;
+                             default:
+                                 ViewHandler.printError("Invalid choice!\n");
+                         }
+                     }
+
+                 }
                
-                  shirtNumber = Inputter.inputInteger("Input shirt number: ","Please input a valid shirt number (1->99)", 1);
-                  
+                  shirtNumber = Inputter.inputInteger("Input shirt number: ","Please input a valid shirt number (1->99)", 1,99);
                   
                   boolean thisNumberHasBeenTaken = clubManagerMethodInterface.isContainShirtNumber(clubId, shirtNumber);
                   if(thisNumberHasBeenTaken)
@@ -377,17 +391,21 @@ public enum OptionProcessor {
                     MenuContainer.getInstance().createYesNoMenu().getMenu(),
                     MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
             );
-            
-            int choice = Inputter.inputInteger("Are you sure to delete this player? ","Invalid choice, please enter again!", 0, 1);
-            switch(choice){
-                case 0:
-                    deletePlayer(playerManager, player);
-                    break;
-                case 1:
-                    ViewHandler.print("You denied to delete this player!\n");
-                    return;
+            int choice = -1;
+            while(choice !=0 && choice !=1){
+                choice = Inputter.inputInteger("Are you sure to delete this player? ","Invalid choice, please enter again!", 0, 1);
+                switch(choice){
+                    case 0:
+                        deletePlayer(playerManager, player);
+                        break;
+                    case 1:
+                        ViewHandler.print("You denied to delete this player!\n");
+                        return;
+                    default:
+                        ViewHandler.printError("Invalid choice!\n");
+                        return;
+                }
             }
-            
         }
         
         public void deletePlayer(Manager<Player> playerManager,Player player){
@@ -475,20 +493,6 @@ public enum OptionProcessor {
         }
     },
     
-    UPDATE_PLAYER_NAME {
-        @Override
-        public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-    },
-    
-    UPDATE_PLAYER_SHIRT_NUMBER {
-        @Override
-        public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-    },
-    
     LIST_ALL_PLAYERS_BY_POSITION {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
@@ -540,14 +544,14 @@ public enum OptionProcessor {
                         else
                             mess = "Input player ID: ";
                      
-                    id = Inputter.inputStringAndLoop(mess,"Please enter a valid ID formaat\n(Club : CL-XXXX | Player : P - XXXX)\nWhere X is number from 0 -> 9", idPattern);
+                    id = Inputter.inputStringAndLoop(mess,"Please enter a valid ID format\n(Club : CL-XXXX | Player : P - XXXX)\nWhere X is number from 0 -> 9", idPattern);
                     if (id == null) {
                         return null;
                     }
                     
                    isDuplicate= duplicateChecker.containId(id);
                     if(isDuplicate){
-                        ViewHandler.printError(errorMess);
+                        ViewHandler.printError(errorMess+"\n");
                     }
                     else
                         break;

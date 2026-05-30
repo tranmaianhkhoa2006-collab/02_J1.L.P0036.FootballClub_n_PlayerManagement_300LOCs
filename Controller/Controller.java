@@ -41,6 +41,9 @@ public class Controller {
     }
     
     public void processOption(int option){
+        if(option==-1)
+            ViewHandler.printError("Invalid choice!\n");
+        
         OptionProcessor.get(option).processOption(playerManager, clubManager);
     } 
 }
