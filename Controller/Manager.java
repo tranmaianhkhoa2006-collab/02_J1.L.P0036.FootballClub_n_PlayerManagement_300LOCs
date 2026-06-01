@@ -12,9 +12,26 @@ import Model.ManagerLimitMethodAccess;
  */
 public abstract class Manager<E> implements ManagerLimitMethodAccess{
     private HashMap<String, E> dataManager = new HashMap<>();
+    private boolean saveStatus;
+    
+    public void setSaveStatus(boolean status){
+        this.saveStatus = status;
+    }
+    
+    public boolean getSaveStatus(){
+        return this.saveStatus;
+    }
     
     public boolean add(String id,E data){
-         return dataManager.put(id.toUpperCase(), data)!=null;
+        boolean isAddSuccess;
+        if(dataManager.containsKey(id))
+            return false;
+        
+        isAddSuccess = dataManager.put(id.toUpperCase(), data)==null;
+        if(isAddSuccess)
+            saveStatus = !isAddSuccess;
+        
+        return isAddSuccess;
     }
     
     public abstract void show();

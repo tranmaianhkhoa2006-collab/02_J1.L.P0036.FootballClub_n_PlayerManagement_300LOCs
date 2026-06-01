@@ -9,7 +9,7 @@ public class MidFielder extends Player{
    
     @Override
     public String getPosition() {
-       return "Mid Fielder";
+       return "Midfielder";
     }
     
 }

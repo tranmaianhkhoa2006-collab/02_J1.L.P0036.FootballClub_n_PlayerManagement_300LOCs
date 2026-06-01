@@ -18,6 +18,8 @@ public abstract class Player {
     public Player(){
     }
     
+    
+    
     public String getPlayerId() {
         return playerId;
     }
@@ -88,8 +90,8 @@ public abstract class Player {
                    "Position: "+this.getPosition();
     }
 
-    public String toSaveFile(){
-         return playerId+", "+playerName+", "+getPosition()+", "+ shirtNumber;
+    public String toSaveString(){
+         return playerId+", "+clubId+", "+playerName+", "+getPosition()+ ", "+shirtNumber;
     }
     
     public static Player getNewPlayer(PlayerType playerType){

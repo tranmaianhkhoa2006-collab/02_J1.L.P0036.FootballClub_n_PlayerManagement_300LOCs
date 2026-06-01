@@ -1,8 +1,11 @@
 package Controller;
 
+import Model.ClubPlayerInterface;
 import Model.Player;
 import Selection.PlayerType;
 import Utils.Acceptable;
+import Utils.ComparatorContainer;
+import Utils.FileIOHandler;
 import Utils.ViewHandler;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,20 +17,25 @@ import java.util.List;
  * @author admin
  */
 public class PlayerManager extends Manager<Player>{
+     private ClubPlayerInterface apiClubManager;
+    
     public static String TABLE_HEADER = 
             ViewHandler.lineBreak(ViewHandler.PLAYER_TABLE_LENGTH)+
             ViewHandler.attributeOfPlayerList("Player ID","Player Name","Club Name","Shirt Number","Position")+
             ViewHandler.lineBreak(ViewHandler.PLAYER_TABLE_LENGTH);
     
+    public void setApiClubManager(ClubPlayerInterface apiClubManager){
+        this.apiClubManager = apiClubManager;
+    }
+    
     @Override
     public void show() {
-        
-        this.show(super.getReadOnlyManagerList());
+        this.show(this.sortByComparator());
     }
     
     public Collection<Player> searchByName(String name){
         List<Player> filterData = new ArrayList<>();
-        for(Player player: super.getReadOnlyManagerList()){
+        for(Player player: this.sortByComparator()){
             if(Acceptable.isPartialEqual(player.getPlayerName(), name)){
                 filterData.add(player);
             }
@@ -36,34 +44,78 @@ public class PlayerManager extends Manager<Player>{
     }
     
     public Collection<Player> filterBySpecificPosition(PlayerType position){
+        
         List<Player> filterData = new ArrayList<>();
-        for(Player player: super.getReadOnlyManagerList()){
-            if(player.getPosition().equals(position.getPosition())){
+        for(Player player: this.sortByComparator()){
+            if(player.getPosition().equalsIgnoreCase(position.getPosition())){
                 filterData.add(player);
             }
         }
+       
+        
         return filterData;
     }
     
+        public Collection<Player> sortByComparator(){
+            List<Player> filterData = new ArrayList<>(super.getReadOnlyManagerList());
+            filterData.sort(ComparatorContainer.sortAscendingByIdForPlayers);
+            return filterData;
+        }
+        
     public Collection<Player> sortByComparator(Comparator<Player> sortingRule){
-        List<Player> filterData = new ArrayList<>(super.getReadOnlyManagerList());
-        filterData.sort(sortingRule);
+        List<Player> filterData = new ArrayList<>(this.sortByComparator());
+            filterData.sort(sortingRule);
+        
         return filterData;
     }
     
     @Override
     public String getPathFile() {
-        return "data/Players.txt";
+        return "data/players.txt";
     }
     
     @Override
     public boolean saveData() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       Collection<Player> filterData = sortByComparator(ComparatorContainer.sortAscendingByIdForPlayers);
+       List<String> listOfStringToSave = new ArrayList();
+       for(Player player : filterData){
+           listOfStringToSave.add(player.toSaveString());
+       }
+       
+       return FileIOHandler.writeStringFile(this.getPathFile(), listOfStringToSave);
+       
     }
 
     @Override
     public boolean loadData() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<String> rawStringOfPlayers = FileIOHandler.readStringFile(this.getPathFile());
+        if(rawStringOfPlayers.isEmpty())
+            return true;
+        
+        for(String rawStringlayer : rawStringOfPlayers){
+             String pieceOfPlayerInfo[] = rawStringlayer.split(",");
+             
+             for(String pieceInfo : pieceOfPlayerInfo){
+                 if(pieceInfo.isEmpty())
+                     return false;
+             }
+             
+             String playerId = pieceOfPlayerInfo[0].trim();
+             String playerClubId = pieceOfPlayerInfo[1].trim();
+              String playerName = pieceOfPlayerInfo[2].trim();
+             PlayerType type = PlayerType.searchPlayerType(pieceOfPlayerInfo[3].trim());
+             int shirtNumber = Integer.parseInt(pieceOfPlayerInfo[4].trim());
+             
+             
+             Player player = Player.getNewPlayer(type).setApiClubManager(apiClubManager)
+                                                                              .setPlayerId(playerId)
+                                                                              .setPlayerName(playerName)
+                                                                              .setClubId(playerClubId)
+                                                                              .setShirtNumber(shirtNumber);
+             super.add(playerId, player);
+        }
+        
+        return true;
     }
 
     public void show(Collection<Player> filterData){

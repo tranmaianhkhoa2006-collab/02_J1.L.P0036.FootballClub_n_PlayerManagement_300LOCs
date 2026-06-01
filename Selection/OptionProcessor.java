@@ -22,7 +22,18 @@ public enum OptionProcessor {
     SAVE_BEFORE_EXITING_PROGRAM {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            if(playerManager.getSaveStatus()|| clubManager.getSaveStatus()){
+                ViewHandler.displayMenu(
+                        MenuContainer.getInstance().createYesNoMenu().getMenu(), 
+                        MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER));
+                
+                switch(Inputter.inputInteger("Input your choice: ", "Invalid choice!",0, 1)){
+                    
+                }
+                
+                playerManager.saveData();
+                clubManager.saveData();
+            }
         }
     },
     
@@ -163,7 +174,7 @@ public enum OptionProcessor {
                     Inputter.inputString("Press enter to continue!\n");
                     ViewHandler.fakeClearScreen();
                     
-                    if(choice != MenuContainer.getInstance().getNumberOfOptions()-1)
+                    if(choice == MenuContainer.getInstance().getNumberOfOptions()-1)
                         break;
                         
                  
@@ -496,21 +507,36 @@ public enum OptionProcessor {
     LIST_ALL_PLAYERS_BY_POSITION {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            PlayerType playerType = Inputter.inputPlayerType("Player type: Defender, Winger, Forward, Goalkeeper, Midfielder\nInput player type: ");
+            if(playerType == null)
+                return;
+            
+            PlayerManager tempCastingPlayerManager  = (PlayerManager)playerManager;
+            tempCastingPlayerManager.show(tempCastingPlayerManager.filterBySpecificPosition(playerType));
+            
         }
     },
     
+     SAVE_DATA {
+        @Override
+        public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
+           clubManager.saveData();
+           playerManager.saveData();
+           ViewHandler.print("Save successfully");
+        }
+    },
+     
     LOAD_DATA {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-    },
-    
-    SAVE_DATA {
-        @Override
-        public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           boolean isLoadSuccess ;  
+           isLoadSuccess =  ((ClubManager)clubManager).loadData() &&((PlayerManager)playerManager).loadData();
+          
+           if(isLoadSuccess)
+             ViewHandler.print("Load data successfully!\n");
+             
+           else
+             ViewHandler.print("Load data failed!\n");
         }
     };
     

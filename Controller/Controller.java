@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.Club;
+import Model.Player;
 import Selection.ListType;
 import Selection.MenuHeaderType;
 import Selection.OptionProcessor;
@@ -15,8 +17,13 @@ import Utils.ViewHandler;
 // pathFile for local git: d:\\javaBaiTap\\Lab211_Lab2\\src
 
 public class Controller {
-    private Manager playerManager = Manager.getNewManagerList(ListType.PLAYER_MANAGER);
-    private Manager clubManager = Manager.getNewManagerList(ListType.CLUB_MANAGER);
+
+    private Manager<Club> clubManager = Manager.getNewManagerList(ListType.CLUB_MANAGER);
+    private Manager<Player> playerManager = Manager.getNewManagerList(ListType.PLAYER_MANAGER);
+    
+    public Controller(){
+        ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
+    }
     
     public void startProgram(){
         while(true){
@@ -28,7 +35,7 @@ public class Controller {
             int option = Inputter.inputInteger("Input your option: ","Invalid choice, please enter again!" ,0, MenuContainer.getInstance().getNumberOfOptions()-1);
             processOption(option);
             boolean isClientWantToLeave = option == 0;
-            Inputter.inputString("Please enter to continue");
+            Inputter.inputString("\nPlease enter to continue\n");
             ViewHandler.fakeClearScreen();
             
             if(isClientWantToLeave){

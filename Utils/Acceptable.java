@@ -8,7 +8,7 @@ package Utils;
 public interface Acceptable {
        public final String  PLAYER_ID_VALID  = "^[Pp]-\\d{4}$"    ;
        
-       public final String  PLAYER_NAME_VALID  = "^[A-Z a-z]{2,35}$"    ;
+       public final String  PLAYER_NAME_VALID  = "^[A-Z a-z]{1,35}$"    ;
        
        public final String  CLUB_NAME_VALID = "^[A-Za-z0-9 ]{1,40}$"; 
        

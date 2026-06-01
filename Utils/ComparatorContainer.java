@@ -22,14 +22,14 @@ public interface ComparatorContainer {
         }
     };
     
-    public static Comparator<Player> sortingForPlayerSaveList = new Comparator<Player>() {
+    public static Comparator<Player> sortAscendingByIdForPlayers = new Comparator<Player>() {
         @Override
         public int compare(Player thisPlayer,Player otherPlayer) {
              return thisPlayer.getPlayerId().compareTo(otherPlayer.getPlayerId());
         }
     };
     
-     public static Comparator<Club> sortingForClubSaveList = new Comparator<Club>() {
+     public static Comparator<Club> sortAscendingByIdForClubs = new Comparator<Club>() {
         @Override
         public int compare(Club thisClub,Club otherClub) {
              return thisClub.getClubId().compareTo(otherClub.getClubId());

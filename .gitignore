@@ -1,5 +1,7 @@
 *.class
 
+ClientTest.java
+
 build/
 bin/
 dist/

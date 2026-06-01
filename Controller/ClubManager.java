@@ -2,9 +2,12 @@ package Controller;
 
 import Model.Club;
 import Model.ClubPlayerInterface;
+import Utils.ComparatorContainer;
+import Utils.FileIOHandler;
 import Utils.ViewHandler;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -19,27 +22,40 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
             ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH); 
     @Override
     public void show() {
-       this.show(super.getReadOnlyManagerList());
+        
+       this.show(this.sortByComparator());
     }
 
     public Collection<Club> filterByBudgetValue(double value){
         List<Club> returnData = new ArrayList<>();
-        for(Club club: super.getReadOnlyManagerList()){
+        for(Club club: this.sortByComparator()){
             if(club.getBudget()<=value)
                 returnData.add(club);
         }
         
         return returnData;
     }
+    
+      public Collection<Club> sortByComparator (){
+           List<Club> filterData = new ArrayList<>(super.getReadOnlyManagerList());
+        filterData.sort(ComparatorContainer.sortAscendingByIdForClubs);
+        return filterData;
+      }
+      public Collection<Club> sortByComparator(Comparator<Club> sortingRule){
+        List<Club> filterData = new ArrayList<>(this.sortByComparator());
+            filterData.sort(sortingRule);
+        return filterData;
+      }
    
     @Override
     public String getClubName(String clubId) {
-        return super.search(clubId).getClubName();
+        return super.search(clubId.toUpperCase()).getClubName();
     }
 
     @Override
     public boolean addShirtNumber(String clubId,String playerId, int nums) {
        Club club = super.search(clubId);
+ 
        if(club.addShirtNumber(nums,playerId))
             return super.update(clubId, club);
        else 
@@ -63,12 +79,45 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
 
     @Override
     public boolean saveData() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Collection<Club> filterData = sortByComparator(ComparatorContainer.sortAscendingByIdForClubs);
+       List<String> listOfStringToSave = new ArrayList();
+       for(Club club : filterData){
+           listOfStringToSave.add(club.toSaveString());
+       }
+       
+       return FileIOHandler.writeStringFile(this.getPathFile(), listOfStringToSave);
+       
     }
 
     @Override
     public boolean loadData() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+      List<String> rawStringOfClubs = FileIOHandler.readStringFile(this.getPathFile());
+        if(rawStringOfClubs.isEmpty())
+            return true;
+        
+        for(String rawStringClub : rawStringOfClubs){
+             String[] pieceOfClubInfo = rawStringClub.split(",");
+             
+             for(String pieceInfo : pieceOfClubInfo){
+                 if(pieceInfo.isEmpty())
+                     return false;
+             }
+              
+             String clubId = pieceOfClubInfo[0].trim();
+             String clubName = pieceOfClubInfo[1].trim();
+             String sponsorBrand = pieceOfClubInfo[2].trim();
+             double budget = Double.parseDouble(pieceOfClubInfo[3]);
+             
+             Club club = Club.createNewClub()
+                                           .setClubId(clubId)
+                                           .setClubName(clubName)
+                                           .setSponsorBrand(sponsorBrand)
+                                           .setBudget(budget);
+             
+             super.add(clubId.toUpperCase(), club);
+        }
+        
+        return true;
     }
     
     @Override
