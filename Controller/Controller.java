@@ -48,9 +48,18 @@ public class Controller {
     }
     
     public void processOption(int option){
-        if(option==-1)
-            ViewHandler.printError("Invalid choice!\n");
+        int optionOfLoadData = MenuContainer.getInstance().getNumberOfOptions()-1;
         
+        //InputInteger(min->max) can return min - 1 
+        if(option==-1){
+            ViewHandler.printError("Invalid choice!\n");
+            return;
+        }
+        else if(option == optionOfLoadData){
+                clubManager = Manager.getNewManagerList(ListType.CLUB_MANAGER);
+                playerManager = Manager.getNewManagerList(ListType.PLAYER_MANAGER);
+                ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
+        }
         OptionProcessor.get(option).processOption(playerManager, clubManager);
     } 
 }

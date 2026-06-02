@@ -9,7 +9,7 @@ public class GoalKeeper extends Player{
      
     @Override
     public String getPosition() {
-        return "Goal Keeper";
+        return "GoalKeeper";
     }
     
 }

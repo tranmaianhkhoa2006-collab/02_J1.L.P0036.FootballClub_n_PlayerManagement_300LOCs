@@ -1,6 +1,7 @@
 package Model;
 
 import Utils.ViewHandler;
+import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -88,7 +89,30 @@ public class Club {
     public String toSaveString(){
         return clubId+", "+clubName+", "+sponsorBrand+", "+budget;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Club other = (Club) obj;
+        return Objects.equals(this.clubId, other.clubId);
+    }
    
+    
+    
     public static Club createNewClub(){
         return new Club();
     }

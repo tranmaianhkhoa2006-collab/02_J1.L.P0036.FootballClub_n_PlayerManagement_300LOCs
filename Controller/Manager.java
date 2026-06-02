@@ -39,7 +39,7 @@ public abstract class Manager<E> implements ManagerLimitMethodAccess{
     public boolean update(String id,E data){
        
         if(dataManager.containsKey(id.toUpperCase()))
-            return dataManager.put(id, data)!=null;
+            return dataManager.put(id.toUpperCase(), data)!=null;
         else
             return false;
     }

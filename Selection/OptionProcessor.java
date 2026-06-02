@@ -105,7 +105,7 @@ public enum OptionProcessor {
             Club foundClub = (Club) clubManager.search(clubId);
 
             if (foundClub != null) {
-                String clubInfo = clubId;
+                String clubInfo = foundClub.toString();
                 ViewHandler.print(
                         ViewHandler.lineBreak(clubInfo.length())
                         + clubInfo
@@ -458,8 +458,9 @@ public enum OptionProcessor {
                         MenuContainer.getHeader(MenuHeaderType.UPDATE_Player_MENU_HEADER)
                 );
                 
-                int choice = Inputter.inputInteger("Input your option: ","Invalid option!\nPlease re-enter!", 0, 1);
+                int choice = Inputter.inputInteger("Input your option: ","Invalid option!\nPlease re-enter!", 0, 4);
                 switch(choice){
+                    case -1:
                     case 0:
                         return;
                     case 1:
@@ -496,7 +497,7 @@ public enum OptionProcessor {
             Player updatedPlayer =Player.getNewPlayer(playerType)
                                             .setPlayerId(player.getPlayerId())
                                             .setPlayerName(player.getPlayerName())
-                                            .setClubId(player.getPosition())
+                                            .setClubId(player.getClubId())
                                             .setShirtNumber(shirtNumber);
             
            return updatedPlayer; 
