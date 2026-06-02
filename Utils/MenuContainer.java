@@ -74,6 +74,7 @@ public class MenuContainer {
          menuOption.add("Update club name");
          menuOption.add("Update sponsor brand");
          menuOption.add("Update budget");
+         menuOption.add("Refuse changing information and exit");
          menuOption.add("Confirm information and change club id to update");
          return menuContainerInstance;
      }

@@ -27,8 +27,10 @@ public enum OptionProcessor {
                         MenuContainer.getInstance().createYesNoMenu().getMenu(), 
                         MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER));
                 
-                switch(Inputter.inputInteger("Input your choice: ", "Invalid choice!",0, 1)){
-                    
+              switch(Inputter.inputInteger("Input your choice: ", "Invalid choice!",0, 1)){
+                    case -1:                        
+                    case 1:
+                        return;
                 }
                 
                 playerManager.saveData();
@@ -166,6 +168,8 @@ public enum OptionProcessor {
                             updatebudget(tempClub);
                             break;
                         case 4:
+                            return;
+                        case 5:
                             break;
                         default:
                             ViewHandler.printError("Invalid choice!\n");

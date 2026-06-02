@@ -6,7 +6,7 @@ package Utils;
  * @author admin
  */
 public interface Acceptable {
-       public final String  PLAYER_ID_VALID  = "^[Pp]-\\d{4}$"    ;
+       public final String  PLAYER_ID_VALID  = "^[Pp]\\d{4}$"    ;
        
        public final String  PLAYER_NAME_VALID  = "^[A-Z a-z]{1,35}$"    ;
        
@@ -25,16 +25,23 @@ public interface Acceptable {
             return data.matches(pattern);
        }
        
+       
        public static boolean isDigitInRange(int digit,int min,int max){
            return digit>=min && digit<=max;
        }
        
+       
+       
        public static boolean isPartialEqual(String firstString,String secondString){
+           //If both string are equal return true;
            if(firstString.equals(secondString))
                return firstString.equals(secondString);
            
+           //Dev
            String minLengthString ;
            String maxLengthString;
+           
+           
            if(firstString.length()<secondString.length()){
                minLengthString= firstString;
                maxLengthString= secondString;
