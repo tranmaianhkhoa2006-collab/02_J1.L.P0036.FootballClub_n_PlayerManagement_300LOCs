@@ -14,16 +14,7 @@ public class ViewHandler {
             ViewHandler.attributeOfPlayerList("","","","","").length();
     public static int CLUB_TABLE_LENGTH =
             ViewHandler.attributeOfClubList("","","","","").length();
-    
-    //using local and numberformatter to get vietnam money format
-     public static String getVietnamMoneyFormat(double fee){
-         Locale vn = new Locale("vi", "vn");
-         NumberFormat moneyFormatter = NumberFormat.getCurrencyInstance(vn);
-         String returnValue = moneyFormatter.format(fee);
-         
-         return returnValue.substring(0, returnValue.length()-2);
-         
-     }
+  
      
      //return row of studentList with player info or return attribute for its table header
      public static String attributeOfPlayerList(String playerId, String playerName, String clubName, String shirtNumber,String position) {
@@ -76,8 +67,9 @@ public class ViewHandler {
       
       //name formatter uppercase first character and lowercase remainning character
       public static String nameFormatter(String rawString){
-          if(rawString == null)
-              return null;
+          if (rawString == null || rawString.trim().isEmpty()) {
+              return ""; 
+          }
           
           
           String words[] = rawString.toLowerCase().trim().split("\\s+");
@@ -88,14 +80,8 @@ public class ViewHandler {
           }
           
           return returnValue.toString().trim();
-      }
       
-      //for display a list of Player
-      
-      
-      //for display a list of club
-  
-     
+     }
      
      public static void fakeClearScreen(){
 

@@ -65,7 +65,22 @@ public class Club {
             return true;
         
     }
+
+    @Override
+    public int hashCode() {
+       int hash = (this.clubId.charAt(clubId.length()-1)-'0') % 9 ;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+       if(obj instanceof Club)
+           return this.clubId.equals(((Club) obj).clubId);
+       
+       return false;
+    }
             
+    
     
     
      public boolean deleteShirtNumber(int shirtNumber){
@@ -90,27 +105,6 @@ public class Club {
         return clubId+", "+clubName+", "+sponsorBrand+", "+budget;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Club other = (Club) obj;
-        return Objects.equals(this.clubId, other.clubId);
-    }
-   
     
     
     public static Club createNewClub(){

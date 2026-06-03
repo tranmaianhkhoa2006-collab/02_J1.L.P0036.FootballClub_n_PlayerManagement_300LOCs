@@ -1,4 +1,4 @@
-package Controller;
+package Business;
 
 import Model.Club;
 import Model.ClubPlayerInterface;
@@ -36,10 +36,17 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
         return returnData;
     }
     
+    //block from delete club
+    @Override
+    public boolean remove(String id){
+        ViewHandler.print("Club can not be deleted!");
+        return false;
+    }
+    
       public Collection<Club> sortByComparator (){
-           List<Club> filterData = new ArrayList<>(super.getReadOnlyManagerList());
-        filterData.sort(ComparatorContainer.sortAscendingByIdForClubs);
-        return filterData;
+         List<Club> filterData = new ArrayList<>(super.getReadOnlyManagerList());
+         filterData.sort(ComparatorContainer.sortAscendingByIdForClubs);
+         return filterData;
       }
       public Collection<Club> sortByComparator(Comparator<Club> sortingRule){
         List<Club> filterData = new ArrayList<>(this.sortByComparator());
@@ -93,14 +100,17 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
     public boolean loadData() {
       List<String> rawStringOfClubs = FileIOHandler.readStringFile(this.getPathFile());
         if(rawStringOfClubs.isEmpty())
-            return true;
+            return false;
         
         for(String rawStringClub : rawStringOfClubs){
              String[] pieceOfClubInfo = rawStringClub.split(",");
              
              for(String pieceInfo : pieceOfClubInfo){
-                 if(pieceInfo.isEmpty())
+                 if(pieceInfo.isEmpty()){
+                     super.clear();
                      return false;
+                     
+                 }
              }
               
              String clubId = pieceOfClubInfo[0].trim();

@@ -1,8 +1,8 @@
 package Selection;
 
-import Controller.ClubManager;
-import Controller.Manager;
-import Controller.PlayerManager;
+import Business.ClubManager;
+import Business.Manager;
+import Business.PlayerManager;
 
 /**
  *

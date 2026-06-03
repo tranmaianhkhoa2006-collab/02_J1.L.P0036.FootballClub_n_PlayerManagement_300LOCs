@@ -1,4 +1,4 @@
-package Controller;
+package Business;
 
 import Model.ClubPlayerInterface;
 import Model.Player;
@@ -27,6 +27,7 @@ public class PlayerManager extends Manager<Player>{
     public void setApiClubManager(ClubPlayerInterface apiClubManager){
         this.apiClubManager = apiClubManager;
     }
+    
     
     @Override
     public void show() {
@@ -90,14 +91,16 @@ public class PlayerManager extends Manager<Player>{
     public boolean loadData() {
         List<String> rawStringOfPlayers = FileIOHandler.readStringFile(this.getPathFile());
         if(rawStringOfPlayers.isEmpty())
-            return true;
+            return false;
         
         for(String rawStringlayer : rawStringOfPlayers){
              String pieceOfPlayerInfo[] = rawStringlayer.split(",");
              
              for(String pieceInfo : pieceOfPlayerInfo){
-                 if(pieceInfo.isEmpty())
+                 if(pieceInfo.isEmpty()){
+                     super.clear();
                      return false;
+                 }
              }
              
              String playerId = pieceOfPlayerInfo[0].trim();

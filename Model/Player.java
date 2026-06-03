@@ -81,6 +81,19 @@ public abstract class Player {
         return this;
     }
     
+    @Override
+    public int hashCode() {
+       int hash = (this.playerId.charAt(playerId.length()-1)-'0') % 9 ;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+       if(obj instanceof Player)
+           return this.playerId.equals(((Player) obj).playerId);
+       
+       return false;
+    }
     public abstract String getPosition();
     public String toString(){
         return "Player ID: "+ this.playerId +"\n"+

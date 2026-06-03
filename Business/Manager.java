@@ -1,4 +1,4 @@
-package Controller;
+package Business;
 
 import Selection.ListType;
 import java.util.Collection;
@@ -63,10 +63,15 @@ public abstract class Manager<E> implements ManagerLimitMethodAccess{
         return dataManager.get(id.toUpperCase());
     }
     
+    protected void clear(){
+        this.dataManager = new HashMap<>();
+    }
+    
     public static Manager getNewManagerList(ListType listType){
        return listType.createNewManager();
         //null = invalid manage list
     }
+    
    
     public Collection<E> getReadOnlyManagerList(){
         return Collections.unmodifiableCollection(this.dataManager.values());

@@ -1,6 +1,4 @@
-package Run;
-
-import Controller.Controller;
+package Controller;
 
 /**
  *
