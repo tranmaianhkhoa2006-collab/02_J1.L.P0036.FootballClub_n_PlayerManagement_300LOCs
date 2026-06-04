@@ -1,6 +1,5 @@
 package Business;
 
-import Model.ClubPlayerInterface;
 import Model.Player;
 import Selection.PlayerType;
 import Utils.Acceptable;

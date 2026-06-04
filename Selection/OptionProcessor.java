@@ -4,8 +4,8 @@ import Business.ClubManager;
 import Business.Manager;
 import Business.PlayerManager;
 import Model.Club;
-import Model.ClubPlayerInterface;
-import Model.ManagerLimitMethodAccess;
+import Business.ClubPlayerInterface;
+import Business.ManagerLimitMethodAccess;
 import Model.Player;
 import Utils.Acceptable;
 import Utils.ComparatorContainer;
@@ -337,6 +337,9 @@ public enum OptionProcessor {
                  }
                
                   shirtNumber = Inputter.inputInteger("Input shirt number: ","Please input a valid shirt number (1->99)", 1,99);
+                  if(shirtNumber == 0){
+                      break;
+                  }
                   
                   boolean thisNumberHasBeenTaken = clubManagerMethodInterface.isContainShirtNumber(clubId, shirtNumber);
                   if(thisNumberHasBeenTaken)

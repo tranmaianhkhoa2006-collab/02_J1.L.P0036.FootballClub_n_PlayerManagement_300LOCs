@@ -6,7 +6,7 @@ package Utils;
  * @author admin
  */
 public interface Acceptable {
-       public final String  PLAYER_ID_VALID  = "^[Pp]\\d{4}$"    ;
+       public final String  PLAYER_ID_VALID  = "^[Pp](000[1-9])|([1-9]{3}[0-9])$"    ;
        
        public final String  PLAYER_NAME_VALID  = "^[A-Z a-z]{1,35}$"    ;
        
@@ -18,7 +18,7 @@ public interface Acceptable {
        
        public final String  INTEGER_VALID = "^\\d+$";
        
-       public final String  CLUB_ID_VALID = "^[Cc][Ll]-\\d{4}$";
+       public final String  CLUB_ID_VALID = "^[Cc][Ll]-(000[1-9])|([1-9]{3}[0-9])$";
        
      
        public static boolean isValid(String data, String pattern){   

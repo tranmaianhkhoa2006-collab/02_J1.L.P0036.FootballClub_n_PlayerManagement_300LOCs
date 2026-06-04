@@ -1,7 +1,6 @@
 package Business;
 
 import Model.Club;
-import Model.ClubPlayerInterface;
 import Utils.ComparatorContainer;
 import Utils.FileIOHandler;
 import Utils.ViewHandler;

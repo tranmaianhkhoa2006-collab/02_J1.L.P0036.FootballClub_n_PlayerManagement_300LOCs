@@ -1,5 +1,6 @@
 package Model;
 
+import Business.ClubPlayerInterface;
 import Selection.PlayerType;
 import Utils.ViewHandler;
 
