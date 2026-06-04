@@ -52,8 +52,7 @@ public abstract class Manager<E> implements ManagerLimitMethodAccess{
     public abstract boolean saveData();
     
     public abstract boolean loadData();
-        
-    
+     
     public boolean containId(String id){
         return dataManager.containsKey(id.toUpperCase());
     }
@@ -62,6 +61,7 @@ public abstract class Manager<E> implements ManagerLimitMethodAccess{
         return dataManager.get(id.toUpperCase());
     }
     
+    //Avoid clear from main and controller class
     protected void clear(){
         this.dataManager = new HashMap<>();
     }

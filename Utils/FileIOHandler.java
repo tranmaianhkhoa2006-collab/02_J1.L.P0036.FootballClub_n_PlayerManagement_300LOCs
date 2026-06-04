@@ -19,15 +19,17 @@ public class FileIOHandler {
     public final static String LOG_PATH = "data/Log.txt";
 
     public static void logWriter(String mess) {
-        try {
-            
-            FileWriter fileWriter = new FileWriter(FileIOHandler.LOG_PATH);
-            BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+        try (
+                FileWriter fileWriter = new FileWriter(FileIOHandler.LOG_PATH);
+                BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+              )
+        {
             LocalDateTime timer = LocalDateTime.now();
             bufferWriter.append(timer + ": " + mess+"\n");
         } 
         catch (IOException e) {
         }
+     
 
     }
 
@@ -37,10 +39,10 @@ public class FileIOHandler {
         }
         
         List<String> returnValue = new ArrayList<>();
-        try {
-
-            FileReader fileReader = new FileReader(pathFile);
-            BufferedReader bufferReader = new BufferedReader(fileReader);
+        try( FileReader fileReader = new FileReader(pathFile);
+                BufferedReader bufferReader = new BufferedReader(fileReader);
+             ) 
+        {
             String line;
             while ((line = bufferReader.readLine()) != null) {
                 returnValue.add(line.trim());
@@ -62,10 +64,11 @@ public class FileIOHandler {
         
         
         boolean isSave = false;
-        try {
-            
-           FileWriter fileWriter = new FileWriter(pathFile);
-           BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+        try (
+                FileWriter fileWriter = new FileWriter(pathFile);
+                BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+              )
+        {   
            for(int i = 0;i<contentList.size();i++){
                bufferWriter.write(contentList.get(i)+"\n");
            }

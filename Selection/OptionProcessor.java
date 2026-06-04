@@ -578,7 +578,7 @@ public enum OptionProcessor {
                         else
                             mess = "Input player ID: ";
                      
-                    id = Inputter.inputStringAndLoop(mess,"Please enter a valid ID format\n(Club : CL-XXXX | Player : P - XXXX)\nWhere X is number from 0 -> 9", idPattern);
+                    id = Inputter.inputStringAndLoop(mess,"Please enter a valid ID format\n(Club : CL-XXXX | Player : PXXXX)\nWhere X is number from 0 -> 9", idPattern);
                     if (id == null) {
                         return null;
                     }

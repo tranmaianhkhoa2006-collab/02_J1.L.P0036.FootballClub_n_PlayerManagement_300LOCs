@@ -1,16 +1,10 @@
 package Selection;
 
 import Model.Defender;
-import Model.Defender;
-import Model.Forward;
 import Model.Forward;
 import Model.GoalKeeper;
-import Model.GoalKeeper;
-import Model.MidFielder;
 import Model.MidFielder;
 import Model.Player;
-import Model.Player;
-import Model.Winger;
 import Model.Winger;
 
 /**

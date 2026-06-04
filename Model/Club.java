@@ -1,7 +1,6 @@
 package Model;
 
 import Utils.ViewHandler;
-import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -51,24 +50,14 @@ public class Club {
         return this;
     }
     
-    public boolean isContainShirtNumber(int number){
-        return this.dataOfShirtNumber.containsKey(number);
-    }
-    
     public int getNumberOfPlayer(){
         return this.dataOfShirtNumber.size();
     }
     
-    public boolean addShirtNumber(int number,String id){
-    
-            this.dataOfShirtNumber.put(number, id);
-            return true;
-        
-    }
-
+    //Only 9 bucket from (0->8) in hashTable
     @Override
     public int hashCode() {
-       int hash = (this.clubId.charAt(clubId.length()-1)-'0') % 9 ;
+        int hash = (this.clubId.charAt(clubId.length()-1)-'0') % 9 ;
         return hash;
     }
 
@@ -79,14 +68,22 @@ public class Club {
        
        return false;
     }
-            
+
+    public boolean addShirtNumber(int number,String id){
     
-    
-    
-     public boolean deleteShirtNumber(int shirtNumber){
+            this.dataOfShirtNumber.put(number, id);
+            return true;
+        
+    }
+
+    public boolean deleteShirtNumber(int shirtNumber){
         return this.dataOfShirtNumber.remove(shirtNumber)!=null;
     }
       
+    public boolean isContainShirtNumber(int number){
+        return this.dataOfShirtNumber.containsKey(number);
+    }
+    
     public boolean updateShirtNumber(int oldNums, int newNums){
                 String thisPlayerID = this.dataOfShirtNumber.remove(oldNums);
                 return this.addShirtNumber(newNums, thisPlayerID);
@@ -105,8 +102,6 @@ public class Club {
         return clubId+", "+clubName+", "+sponsorBrand+", "+budget;
     }
 
-    
-    
     public static Club createNewClub(){
         return new Club();
     }

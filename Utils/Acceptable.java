@@ -37,31 +37,11 @@ public interface Acceptable {
            if(firstString.equals(secondString))
                return firstString.equals(secondString);
            
-           //Dev
-           String minLengthString ;
-           String maxLengthString;
+           boolean isPartialEqualString = 
+                   firstString.toLowerCase().contains(secondString.toLowerCase()) || 
+                   secondString.toLowerCase().contains(firstString.toLowerCase());
            
-           
-           if(firstString.length()<secondString.length()){
-               minLengthString= firstString;
-               maxLengthString= secondString;
-           }
-           else {
-               minLengthString = secondString;
-               maxLengthString = firstString;
-           }
-           
-           int minLength = minLengthString.length();
-           boolean isEqual = false;
-           for(int i=0;i<=maxLengthString.length()-minLength;i++){
-              isEqual = minLengthString.equalsIgnoreCase(maxLengthString.substring(i, i+minLength));
-              if(isEqual){
-                  break;
-              }
-              
-           }
-           
-           return isEqual;
+           return isPartialEqualString;
        }
        
        

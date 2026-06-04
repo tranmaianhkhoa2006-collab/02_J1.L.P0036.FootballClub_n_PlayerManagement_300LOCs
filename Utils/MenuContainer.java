@@ -19,8 +19,7 @@ public class MenuContainer {
      
      //menu pattern
      public final static String PATTERN_OF_MENU = "| %-"+(MenuContainer.HEADER_WIDTH-4)+"s |";
-     
-     
+    
      private MenuContainer(){
      }
      
@@ -90,6 +89,7 @@ public class MenuContainer {
          return menuOption.size();
      }
      
+     //reuse code can be easier instead of using multiple sout(s) for each menu
      public List<String> getMenu(){
          return Collections.unmodifiableList(menuOption);
      }

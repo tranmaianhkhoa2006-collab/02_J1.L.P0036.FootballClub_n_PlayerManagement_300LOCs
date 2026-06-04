@@ -17,7 +17,8 @@ import java.util.List;
  */
 public class PlayerManager extends Manager<Player>{
      private ClubPlayerInterface apiClubManager;
-    
+     private final String PATH_FILE = "data/players.txt";
+     
     public static String TABLE_HEADER = 
             ViewHandler.lineBreak(ViewHandler.PLAYER_TABLE_LENGTH)+
             ViewHandler.attributeOfPlayerList("Player ID","Player Name","Club Name","Shirt Number","Position")+
@@ -32,6 +33,27 @@ public class PlayerManager extends Manager<Player>{
     public void show() {
         this.show(this.sortByComparator());
     }
+    
+    public void show(Collection<Player> filterData){
+        if(filterData.isEmpty()){
+            ViewHandler.print("There is no data or there is no player matches conditions to view!\n");
+            return;
+        }
+        
+        ViewHandler.print(TABLE_HEADER);
+        for(Player player: filterData){
+            ViewHandler.print(
+                    ViewHandler.attributeOfPlayerList(
+                            player.getPlayerId(),
+                            player.getPlayerName(),
+                            player.getApiClubManager().getClubName(player.getClubId()),
+                            player.getShirtNumber()+"",
+                            player.getPosition()
+                    )+
+                 ViewHandler.lineBreak(ViewHandler.PLAYER_TABLE_LENGTH)
+            );
+        }
+    } 
     
     public Collection<Player> searchByName(String name){
         List<Player> filterData = new ArrayList<>();
@@ -56,7 +78,8 @@ public class PlayerManager extends Manager<Player>{
         return filterData;
     }
     
-        public Collection<Player> sortByComparator(){
+    //default is sort by id
+    public Collection<Player> sortByComparator(){
             List<Player> filterData = new ArrayList<>(super.getReadOnlyManagerList());
             filterData.sort(ComparatorContainer.sortAscendingByIdForPlayers);
             return filterData;
@@ -71,9 +94,9 @@ public class PlayerManager extends Manager<Player>{
     
     @Override
     public String getPathFile() {
-        return "data/players.txt";
+        return PATH_FILE;
     }
-    
+     
     @Override
     public boolean saveData() {
        Collection<Player> filterData = sortByComparator(ComparatorContainer.sortAscendingByIdForPlayers);
@@ -119,27 +142,4 @@ public class PlayerManager extends Manager<Player>{
         
         return true;
     }
-
-    public void show(Collection<Player> filterData){
-        if(filterData.isEmpty()){
-            ViewHandler.print("There is no data or there is no player matches conditions to view!\n");
-            return;
-        }
-        
-        ViewHandler.print(TABLE_HEADER);
-        for(Player player: filterData){
-            ViewHandler.print(
-                    ViewHandler.attributeOfPlayerList(
-                            player.getPlayerId(),
-                            player.getPlayerName(),
-                            player.getApiClubManager().getClubName(player.getClubId()),
-                            player.getShirtNumber()+"",
-                            player.getPosition()
-                    )+
-                 ViewHandler.lineBreak(ViewHandler.PLAYER_TABLE_LENGTH)
-            );
-        }
-    } 
-    
-    
 }

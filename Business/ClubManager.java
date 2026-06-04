@@ -14,7 +14,8 @@ import java.util.List;
  * @author admin
  */
 public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
-
+    private final String PATH_FILE = "data/clubs.txt";
+    
     public final static String TABLE_HEADER =
             ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH)+
             ViewHandler.attributeOfClubList("Club ID", "Club name","Sponsor Brand","Budget","Numbers of players")+
@@ -25,6 +26,27 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
        this.show(this.sortByComparator());
     }
 
+    public void show(Collection<Club> filterData){  
+        if(filterData.isEmpty()){
+            ViewHandler.print("There is no data or there is no club matches conditions to view!\n");
+            return;
+        }
+        
+        ViewHandler.print(ClubManager.TABLE_HEADER);
+        for(Club club: filterData){   
+            ViewHandler.print(
+                    ViewHandler.attributeOfClubList(
+                            club.getClubId(), 
+                            club.getClubName(), 
+                            club.getSponsorBrand(),
+                            club.getBudget()+"",
+                            club.getNumberOfPlayer()+""
+                    )+
+                    ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH)
+            );
+        }
+    }
+      
     public Collection<Club> filterByBudgetValue(double value){
         List<Club> returnData = new ArrayList<>();
         for(Club club: this.sortByComparator()){
@@ -35,54 +57,25 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
         return returnData;
     }
     
-    //block from delete club
+    //block from delete club by controller
     @Override
     public boolean remove(String id){
-        ViewHandler.print("Club can not be deleted!");
+        ViewHandler.printError("Club can not be deleted!\n");
         return false;
     }
     
-      public Collection<Club> sortByComparator (){
+    public Collection<Club> sortByComparator (){
          List<Club> filterData = new ArrayList<>(super.getReadOnlyManagerList());
          filterData.sort(ComparatorContainer.sortAscendingByIdForClubs);
          return filterData;
       }
-      public Collection<Club> sortByComparator(Comparator<Club> sortingRule){
+      
+    public Collection<Club> sortByComparator(Comparator<Club> sortingRule){
         List<Club> filterData = new ArrayList<>(this.sortByComparator());
             filterData.sort(sortingRule);
         return filterData;
       }
    
-    @Override
-    public String getClubName(String clubId) {
-        return super.search(clubId.toUpperCase()).getClubName();
-    }
-
-    @Override
-    public boolean addShirtNumber(String clubId,String playerId, int nums) {
-       Club club = super.search(clubId);
- 
-       if(club.addShirtNumber(nums,playerId))
-            return super.update(clubId, club);
-       else 
-           return false;
-    }
-
-    @Override
-    public boolean updateShirtNumber(String clubId, int oldNums, int newNums) {
-        Club club = super.search(clubId);
-        if(club == null)
-            return false;
-        
-        return club.updateShirtNumber(oldNums, newNums);
-    }
-
-    @Override
-    public boolean deleteShirtNumber(String clubId, int nums) {
-        Club club = super.search(clubId); 
-        return club.deleteShirtNumber(nums);
-    }
-
     @Override
     public boolean saveData() {
         Collection<Club> filterData = sortByComparator(ComparatorContainer.sortAscendingByIdForClubs);
@@ -131,30 +124,39 @@ public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
     
     @Override
     public String getPathFile() {
-        return "data/clubs.txt";
+        return PATH_FILE;
     }
-    
-    public void show(Collection<Club> filterData){  
-        if(filterData.isEmpty()){
-            ViewHandler.print("There is no data or there is no club matches conditions to view!\n");
-            return;
-        }
-        
-        ViewHandler.print(ClubManager.TABLE_HEADER);
-        for(Club club: filterData){   
-            ViewHandler.print(
-                    ViewHandler.attributeOfClubList(
-                            club.getClubId(), 
-                            club.getClubName(), 
-                            club.getSponsorBrand(),
-                            club.getBudget()+"",
-                            club.getNumberOfPlayer()+""
-                    )+
-                    ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH)
-            );
-        }
+   
+    @Override
+    public String getClubName(String clubId) {
+        return super.search(clubId.toUpperCase()).getClubName();
     }
 
+    @Override
+    public boolean addShirtNumber(String clubId,String playerId, int nums) {
+       Club club = super.search(clubId);
+ 
+       if(club.addShirtNumber(nums,playerId))
+            return super.update(clubId, club);
+       else 
+           return false;
+    }
+
+    @Override
+    public boolean updateShirtNumber(String clubId, int oldNums, int newNums) {
+        Club club = super.search(clubId);
+        if(club == null)
+            return false;
+        
+        return club.updateShirtNumber(oldNums, newNums);
+    }
+
+    @Override
+    public boolean deleteShirtNumber(String clubId, int nums) {
+        Club club = super.search(clubId); 
+        return club.deleteShirtNumber(nums);
+    }
+    
     @Override
     public boolean isContainShirtNumber(String clubId, int nums) {
         Club club = this.search(clubId);

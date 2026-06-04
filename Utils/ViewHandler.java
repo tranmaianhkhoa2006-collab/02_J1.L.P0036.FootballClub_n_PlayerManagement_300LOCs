@@ -2,17 +2,15 @@
 
 package Utils;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 /**
  *
  * @author admin
  */
 public class ViewHandler {
-    public static int PLAYER_TABLE_LENGTH = 
+    public static final int PLAYER_TABLE_LENGTH = 
             ViewHandler.attributeOfPlayerList("","","","","").length();
-    public static int CLUB_TABLE_LENGTH =
+    public static final int CLUB_TABLE_LENGTH =
             ViewHandler.attributeOfClubList("","","","","").length();
   
      
@@ -62,7 +60,6 @@ public class ViewHandler {
            }
            ViewHandler.print(String.format(pattern,""));
            ViewHandler.print(ViewHandler.lineBreak(MenuContainer.HEADER_WIDTH));   
-           ViewHandler.print("Note: The system will ask for whether continuing to input information after 3 times failed except choosing options\n");
       }
       
       //name formatter uppercase first character and lowercase remainning character
@@ -70,8 +67,7 @@ public class ViewHandler {
           if (rawString == null || rawString.trim().isEmpty()) {
               return ""; 
           }
-          
-          
+       
           String words[] = rawString.toLowerCase().trim().split("\\s+");
           StringBuilder returnValue = new StringBuilder();
           
@@ -83,10 +79,12 @@ public class ViewHandler {
       
      }
      
+      //avoid creating String trash by using StringBuilder
      public static void fakeClearScreen(){
-
-         for(int i=0;i<80;i++){
-             System.out.println();
+         StringBuilder breakLine = new StringBuilder();
+         for(int i=1;i<=80;i+=2){
+            breakLine.append("\n\n");
          }    
+         ViewHandler.print(breakLine.toString());
      }
 }
