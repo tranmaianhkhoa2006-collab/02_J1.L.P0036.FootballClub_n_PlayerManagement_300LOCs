@@ -16,7 +16,7 @@ import java.util.List;
  * @author admin
  */
 public class PlayerManager extends Manager<Player>{
-     private ClubPlayerInterface apiClubManager;
+     private ClubAndPlayerConnection apiClubManager;
      private final String PATH_FILE = "data/players.txt";
      
     public static String TABLE_HEADER = 
@@ -24,7 +24,7 @@ public class PlayerManager extends Manager<Player>{
             ViewHandler.attributeOfPlayerList("Player ID","Player Name","Club Name","Shirt Number","Position")+
             ViewHandler.lineBreak(ViewHandler.PLAYER_TABLE_LENGTH);
     
-    public void setApiClubManager(ClubPlayerInterface apiClubManager){
+    public void setApiClubManager(ClubAndPlayerConnection apiClubManager){
         this.apiClubManager = apiClubManager;
     }
     

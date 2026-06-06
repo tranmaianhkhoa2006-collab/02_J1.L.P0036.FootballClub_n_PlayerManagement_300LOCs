@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author admin
  */
-public class ClubManager extends Manager<Club> implements ClubPlayerInterface{
+public class ClubManager extends Manager<Club> implements ClubAndPlayerConnection{
     private final String PATH_FILE = "data/clubs.txt";
     
     public final static String TABLE_HEADER =

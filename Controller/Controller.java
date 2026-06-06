@@ -5,7 +5,7 @@ import Business.Manager;
 import Business.PlayerManager;
 import Model.Club;
 import Model.Player;
-import Selection.ListType;
+import Selection.ManagerType;
 import Selection.MenuHeaderType;
 import Selection.OptionProcessor;
 import Utils.Inputter;
@@ -21,8 +21,8 @@ import Utils.ViewHandler;
 
 public class Controller {
 
-    private Manager<Club> clubManager = Manager.getNewManagerList(ListType.CLUB_MANAGER);
-    private Manager<Player> playerManager = Manager.getNewManagerList(ListType.PLAYER_MANAGER);
+    private Manager<Club> clubManager = Manager.getNewManagerList(ManagerType.CLUB_MANAGER);
+    private Manager<Player> playerManager = Manager.getNewManagerList(ManagerType.PLAYER_MANAGER);
     
     public Controller(){
         ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
@@ -59,8 +59,8 @@ public class Controller {
             return;
         }
         else if(option == optionOfLoadData){
-                clubManager = Manager.getNewManagerList(ListType.CLUB_MANAGER);
-                playerManager = Manager.getNewManagerList(ListType.PLAYER_MANAGER);
+                clubManager = Manager.getNewManagerList(ManagerType.CLUB_MANAGER);
+                playerManager = Manager.getNewManagerList(ManagerType.PLAYER_MANAGER);
                 ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
         }
         OptionProcessor.get(option).processOption(playerManager, clubManager);

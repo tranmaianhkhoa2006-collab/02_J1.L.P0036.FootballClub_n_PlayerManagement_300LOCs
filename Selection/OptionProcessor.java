@@ -4,8 +4,6 @@ import Business.ClubManager;
 import Business.Manager;
 import Business.PlayerManager;
 import Model.Club;
-import Business.ClubPlayerInterface;
-import Business.ManagerLimitMethodAccess;
 import Model.Player;
 import Utils.Acceptable;
 import Utils.ComparatorContainer;
@@ -13,6 +11,7 @@ import Utils.Inputter;
 import Utils.MenuContainer;
 import Utils.ViewHandler;
 import static Utils.Inputter.inputInteger;
+import Business.ClubAndPlayerConnection;
 
 /**
  *
@@ -50,10 +49,13 @@ public enum OptionProcessor {
     ADD_CLUB {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            String clubId = inputIdAndDuplicateCheck(clubManager,Acceptable.CLUB_ID_VALID,
-                    "This club id already exist!");
+            String clubId = Inputter.inputStringAndLoop("Input Club ID(Format: CL-XXXX | XXXX is from 0001-9999): ","Invalid format!", Acceptable.CLUB_ID_VALID);
             
             if (clubId == null) {
+                return;
+            }
+             else if(Acceptable.checkExistID(clubId, clubManager)){
+                ViewHandler.printError("This id already exists!\n");
                 return;
             }
 
@@ -271,23 +273,34 @@ public enum OptionProcessor {
     ADD_PLAYER {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            String id = inputIdAndDuplicateCheck(playerManager,Acceptable.PLAYER_ID_VALID,
-                    "Please enter a valid player id!");
+            String id = Inputter.inputStringAndLoop("Input ID(Format: PXXXX (XXXX is from 0001-9999)): ","Invalid format!", Acceptable.PLAYER_ID_VALID);
             if(id == null)
                 return;
+            else if(Acceptable.checkExistID(id, playerManager)){
+                ViewHandler.printError("This id already exists!\n");
+                return;
+            }
             
             String name = Inputter.inputStringAndLoop("Input player name: ",
                     "Please enter correct name!\nName can not contain numbers and special characters", Acceptable.PLAYER_NAME_VALID);
             if(name == null)
                 return;
             
-            String clubId = inputPlayerClubID(clubManager);
+            String clubId = Inputter.inputStringAndLoop("Input club id(Format: CL-XXXX | XXXX is from 0001-9999): ", "Invalid club id format", Acceptable.CLUB_ID_VALID);
             if(clubId == null)
                 return;
-           
-            int shirtNumber= inputShirtNumberSupportter((ClubManager) clubManager, clubId);
+            else if(!Acceptable.checkExistID(clubId, clubManager)){
+                ViewHandler.printError("This club is not exist!");
+                return;
+            }
+            
+            int shirtNumber=  Inputter.inputInteger("Input shirt number(1->99) or press 0 to return: ","Invalid shirt number!", 1, 99);
             if(shirtNumber == 0)
                 return;
+            else if(Acceptable.checkExistShirtNumber(clubId, shirtNumber, (ClubManager)clubManager)){
+               ViewHandler.printError("This number already exist in this club");
+               return;
+            }
             
             PlayerType playerType = Inputter.inputPlayerType("Player type: Defender, Winger, Forward, Goalkeeper, Midfielder\n"
                     + "Input player type: ");
@@ -306,83 +319,7 @@ public enum OptionProcessor {
             ViewHandler.print("Add player successfully!\n");
             
         }
-        
-        public int inputShirtNumberSupportter(ClubPlayerInterface clubManagerMethodInterface,String clubId){
-            int shirtNumber;
-            ViewHandler.print("Input 0 to return main menu\n");
-            int count=0; 
-             while(true){
-                   count++;
-               
-            
-               if(count>3){
-                   ViewHandler.displayMenu(
-                           MenuContainer.getInstance().createYesNoMenu().getMenu(),
-                           MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
-                   );
-                     int choice = -1;
-                     while (choice != 0 && choice != 1) {
-                         choice = inputInteger("Do you want of continue?: ", "Invalid choice, please enter again!", 0, 1);
-
-                         switch (choice) {
-                             case 0:
-                                 count = 0;
-                             case 1:
-                                 return 0;
-                             default:
-                                 ViewHandler.printError("Invalid choice!\n");
-                         }
-                     }
-
-                 }
-               
-                  shirtNumber = Inputter.inputInteger("Input shirt number: ","Please input a valid shirt number (1->99)", 1,99);
-                  if(shirtNumber == 0){
-                      break;
-                  }
-                  
-                  boolean thisNumberHasBeenTaken = clubManagerMethodInterface.isContainShirtNumber(clubId, shirtNumber);
-                  if(thisNumberHasBeenTaken)
-                      ViewHandler.print("This shirt number already exists in this club!\n");
-                  else 
-                      break;
-                 
-             }
-             
-             return shirtNumber;
-        }
-        
-        public String inputPlayerClubID(ManagerLimitMethodAccess duplicateChecker) {
-        int attemptOfInput = 0;
-        String id;
-        do {
-            boolean isThreeAttempt = ++attemptOfInput > 3;
-
-            if (isThreeAttempt) {
-                switch (inputInteger("Do you want of continue?: ","Invalid choice, please enter again!", 0, 1)) {
-                    case 0:
-                        attemptOfInput = 0;
-                        break;
-                    case 1:
-                        return null;
-                }
-            }
-            id = Inputter.inputStringAndLoop("Input player club id: ","Please enter a valid club id!\n(Format : CL-XXXX | X is a number from 0 -> 9)", Acceptable.CLUB_ID_VALID);
-            if (id == null) {
-                return null;
-            }
-
-            if (!duplicateChecker.containId(id)) {
-                ViewHandler.print("This club id does not exist\n");
-            }
-            else
-                break;
-        } 
-        while (true);
-        return id;
-        
-    }
-        
+         
     },
     
     REMOVE_PLAYER_BY_ID {
@@ -497,7 +434,7 @@ public enum OptionProcessor {
             
             int shirtNumber = player.getShirtNumber();
             player.getApiClubManager().deleteShirtNumber(player.getClubId(), shirtNumber);
-            Player updatedPlayer =Player.getNewPlayer(playerType)
+            Player updatedPlayer = Player.getNewPlayer(playerType)
                                             .setPlayerId(player.getPlayerId())
                                             .setPlayerName(player.getPlayerName())
                                             .setClubId(player.getClubId())
@@ -508,6 +445,11 @@ public enum OptionProcessor {
         
         public Player updatePlayerShirtNumber(Player player){
             int newShirtNumber = Inputter.inputInteger("Input new shirt number: ","Please input a valid shirt number!(1-99)", 1, 99);
+            ClubAndPlayerConnection checker = player.getApiClubManager();
+            if(Acceptable.checkExistShirtNumber(player.getClubId(), newShirtNumber, checker)){
+                ViewHandler.printError("This shirt number already exist in this club!\n");
+                return player;
+            }         
             return player.setShirtNumber(newShirtNumber);
         }
     },
@@ -554,44 +496,4 @@ public enum OptionProcessor {
     public static OptionProcessor get(int option){
         return OptionProcessor.values()[option];
     }
-    
-    public static String inputIdAndDuplicateCheck(ManagerLimitMethodAccess duplicateChecker, String idPattern,String errorMess) {
-                int attemptOfInput = 0;
-                String id;
-                boolean isDuplicate;
-                do {
-                    boolean isThreeAttempt = ++attemptOfInput > 3;
-
-                    if (isThreeAttempt) {
-                        switch (inputInteger("Do you want of continue?: ","Invalid choice, please enter again!", 0, 1)) {
-                            case 0:
-                                attemptOfInput = 0;
-                                break;
-                            case 1:
-                                return null;
-                        }
-                    }
-                    
-                    String mess ;
-                     if(idPattern.equals(Acceptable.CLUB_ID_VALID))
-                            mess = "Input Club ID: ";
-                        else
-                            mess = "Input player ID: ";
-                     
-                    id = Inputter.inputStringAndLoop(mess,"Please enter a valid ID format\n(Club : CL-XXXX | Player : PXXXX)\nWhere X is number from 0 -> 9", idPattern);
-                    if (id == null) {
-                        return null;
-                    }
-                    
-                   isDuplicate= duplicateChecker.containId(id);
-                    if(isDuplicate){
-                        ViewHandler.printError(errorMess+"\n");
-                    }
-                    else
-                        break;
-
-               } while (true);
-             
-              return id;  
-       }       
 }

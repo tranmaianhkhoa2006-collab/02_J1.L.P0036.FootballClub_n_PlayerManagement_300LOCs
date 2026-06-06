@@ -1,8 +1,8 @@
 package Model;
 
-import Business.ClubPlayerInterface;
 import Selection.PlayerType;
 import Utils.ViewHandler;
+import Business.ClubAndPlayerConnection;
 
 /**
  *
@@ -13,7 +13,7 @@ public abstract class Player {
     private String playerName;
     private String clubId;
     private int shirtNumber;
-    private ClubPlayerInterface apiClubManager;
+    private ClubAndPlayerConnection apiClubManager;
 
 
     public Player(){
@@ -73,11 +73,11 @@ public abstract class Player {
         return this;
     }
 
-    public ClubPlayerInterface getApiClubManager() {
+    public ClubAndPlayerConnection getApiClubManager() {
         return apiClubManager;
     }
     
-    public Player setApiClubManager(ClubPlayerInterface apiClubManager){
+    public Player setApiClubManager(ClubAndPlayerConnection apiClubManager){
             this.apiClubManager = apiClubManager;
         return this;
     }

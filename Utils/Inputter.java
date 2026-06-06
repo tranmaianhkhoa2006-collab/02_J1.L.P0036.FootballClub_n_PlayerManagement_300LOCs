@@ -143,8 +143,7 @@ public class Inputter {
          while(!isValid);
          return returnValue;
      }
-     
-     
+    
      public static double inputDouble(String mess,String errorMess){
          String returnValue;
        

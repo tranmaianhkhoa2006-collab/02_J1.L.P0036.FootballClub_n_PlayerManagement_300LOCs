@@ -12,8 +12,7 @@ public class ViewHandler {
             ViewHandler.attributeOfPlayerList("","","","","").length();
     public static final int CLUB_TABLE_LENGTH =
             ViewHandler.attributeOfClubList("","","","","").length();
-  
-     
+ 
      //return row of studentList with player info or return attribute for its table header
      public static String attributeOfPlayerList(String playerId, String playerName, String clubName, String shirtNumber,String position) {
          String returnValue =

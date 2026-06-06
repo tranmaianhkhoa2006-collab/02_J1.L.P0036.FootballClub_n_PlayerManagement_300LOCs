@@ -1,6 +1,6 @@
 package Business;
 
-import Selection.ListType;
+import Selection.ManagerType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.HashMap;
  *
  * @author admin
  */
-public abstract class Manager<E> implements ManagerLimitMethodAccess{
+public abstract class Manager<E> implements ExistIDChecker{
     private HashMap<String, E> dataManager = new HashMap<>();
     private boolean saveStatus;
     
@@ -37,14 +37,21 @@ public abstract class Manager<E> implements ManagerLimitMethodAccess{
     
     public boolean update(String id,E data){
        
-        if(dataManager.containsKey(id.toUpperCase()))
+        if(dataManager.containsKey(id.toUpperCase())){
+            saveStatus = false;
             return dataManager.put(id.toUpperCase(), data)!=null;
+        }
         else
             return false;
     }
     
     public boolean remove(String id){
-        return dataManager.remove(id.toUpperCase())!=null;
+        boolean isDeleteSuccess = dataManager.remove(id.toUpperCase())!=null;
+        if(isDeleteSuccess){
+            saveStatus = false;
+        }
+        
+        return isDeleteSuccess;
     }
     
     public abstract String getPathFile();
@@ -52,7 +59,8 @@ public abstract class Manager<E> implements ManagerLimitMethodAccess{
     public abstract boolean saveData();
     
     public abstract boolean loadData();
-     
+    
+    @Override
     public boolean containId(String id){
         return dataManager.containsKey(id.toUpperCase());
     }
@@ -66,7 +74,7 @@ public abstract class Manager<E> implements ManagerLimitMethodAccess{
         this.dataManager = new HashMap<>();
     }
     
-    public static Manager getNewManagerList(ListType listType){
+    public static Manager getNewManagerList(ManagerType listType){
        return listType.createNewManager();
         //null = invalid manage list
     }

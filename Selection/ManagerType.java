@@ -8,7 +8,7 @@ import Business.PlayerManager;
  *
  * @author admin
  */
-public enum ListType {
+public enum ManagerType {
     PLAYER_MANAGER{
         @Override
         public Manager createNewManager() {
