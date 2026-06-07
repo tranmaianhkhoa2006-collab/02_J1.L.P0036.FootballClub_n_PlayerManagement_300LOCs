@@ -28,7 +28,7 @@ public class PlayerManager extends Manager<Player>{
         this.apiClubManager = apiClubManager;
     }
     
-    
+   
     @Override
     public void show() {
         this.show(this.sortByComparator());
