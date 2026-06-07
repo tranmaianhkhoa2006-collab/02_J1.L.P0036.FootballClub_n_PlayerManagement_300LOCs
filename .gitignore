@@ -1,7 +1,6 @@
 *.class
 *.zip
 
-ClientTest.java
 
 build/
 bin/
@@ -16,6 +15,7 @@ build.xml
 .idea/
 *.iml
 *.iws
+
 
 Thumbs.db
 .DS_Store
