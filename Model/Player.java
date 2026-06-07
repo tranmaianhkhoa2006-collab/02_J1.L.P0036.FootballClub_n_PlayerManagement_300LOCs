@@ -29,6 +29,7 @@ public abstract class Player {
         this.playerId = id.toUpperCase();
         return this;
     }
+    
     public String getPlayerName() {
         return playerName;
     }
@@ -95,7 +96,9 @@ public abstract class Player {
        
        return false;
     }
+    
     public abstract String getPosition();
+    
     public String toString(){
         return "Player ID: "+ this.playerId +"\n"+
                    "Player Name: "+ this.playerName +"\n"+

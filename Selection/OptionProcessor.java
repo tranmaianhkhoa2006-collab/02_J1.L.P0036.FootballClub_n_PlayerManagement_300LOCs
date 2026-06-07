@@ -55,7 +55,7 @@ public enum OptionProcessor {
                 return;
             }
              else if(Acceptable.checkExistID(clubId, clubManager)){
-                ViewHandler.printError("This id already exists!\n");
+                ViewHandler.printError("This club ID already exists!\n");
                 return;
             }
 
@@ -73,11 +73,11 @@ public enum OptionProcessor {
                 return;
             }
 
-            double budget = Inputter.inputDouble("Input club budget: ", 0, 
-                    "Please enter valid budget or press -1 to return to skip!");
+            double budget = Inputter.inputDouble("Input club budget: ", 1, 
+                    "Please enter valid budget or press 0 to return to menu!");
             
-            if(budget == -1)
-                budget = 0;
+            if(budget == 0)
+                return;
 
             boolean isAddSuccess = clubManager.add(clubId,
                     Club.createNewClub().
@@ -89,6 +89,9 @@ public enum OptionProcessor {
             
             if (isAddSuccess) {
                 ViewHandler.print("Added club successfully\n");
+            }
+            else{
+                ViewHandler.printError("Added club unsuccessfully\n");
             }
 
         }
@@ -395,7 +398,7 @@ public enum OptionProcessor {
                 
                 ViewHandler.displayMenu(
                         MenuContainer.getInstance().createUpdatePlayerMenu().getMenu(),
-                        MenuContainer.getHeader(MenuHeaderType.UPDATE_Player_MENU_HEADER)
+                        MenuContainer.getHeader(MenuHeaderType.UPDATE_PlAYER_MENU_HEADER)
                 );
                 
                 int choice = Inputter.inputInteger("Input your option: ","Invalid option!\nPlease re-enter!", 0, 4);
@@ -435,6 +438,7 @@ public enum OptionProcessor {
             int shirtNumber = player.getShirtNumber();
             player.getApiClubManager().deleteShirtNumber(player.getClubId(), shirtNumber);
             Player updatedPlayer = Player.getNewPlayer(playerType)
+                                            .setApiClubManager(player.getApiClubManager())
                                             .setPlayerId(player.getPlayerId())
                                             .setPlayerName(player.getPlayerName())
                                             .setClubId(player.getClubId())

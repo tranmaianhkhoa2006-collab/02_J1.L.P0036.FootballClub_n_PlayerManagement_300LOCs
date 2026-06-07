@@ -127,7 +127,7 @@ public class PlayerManager extends Manager<Player>{
              
              String playerId = pieceOfPlayerInfo[0].trim();
              String playerClubId = pieceOfPlayerInfo[1].trim();
-              String playerName = pieceOfPlayerInfo[2].trim();
+             String playerName = pieceOfPlayerInfo[2].trim();
              PlayerType type = PlayerType.searchPlayerType(pieceOfPlayerInfo[3].trim());
              int shirtNumber = Integer.parseInt(pieceOfPlayerInfo[4].trim());
              
@@ -137,6 +137,7 @@ public class PlayerManager extends Manager<Player>{
                                                                               .setPlayerName(playerName)
                                                                               .setClubId(playerClubId)
                                                                               .setShirtNumber(shirtNumber);
+             super.setSaveStatus(true);
              super.add(playerId, player);
         }
         

@@ -63,7 +63,7 @@ public class Inputter {
                          MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
                  );
                  int choice = -1;
-                 while (choice != 0 || choice != 1) {
+                 while (choice != 0 && choice != 1) {
                      choice = inputInteger("Do you want of continue?: ", "Invalid choice, please enter again!", 0, 1);
                      switch (choice) {
                          case 0:

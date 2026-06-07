@@ -9,13 +9,13 @@ import Business.ExistIDChecker;
  * @author admin
  */
 public interface Acceptable {
-       public final String  PLAYER_ID_VALID  = "^[Pp](000[1-9])|([1-9]{3}[0-9])$"    ;
+       public final String  PLAYER_ID_VALID  = "^[Pp]((000[1-9])|([1-9]{3}[0-9]))$"    ;
        
-       public final String  PLAYER_NAME_VALID  = "^[A-Z a-z]+$"    ;
+       public final String  PLAYER_NAME_VALID  = "^[\\p{L} ]{2,}$"    ;
        
-       public final String  CLUB_NAME_VALID = "^[A-Za-z0-9 ]+$"; 
+       public final String  CLUB_NAME_VALID = "^[\\p{L} 0-9]+$"; 
        
-       public final String  SPONSOR_BRAND_VALID = "^[A-Za-z0-9 -,$._]+$";
+       public final String  SPONSOR_BRAND_VALID = "^[\\p{L} 0-9-,$._]+$";
        
        public final String  DOUBLE_VALID = "^([-])?\\d+([.,]\\d+)?$"  ;
        

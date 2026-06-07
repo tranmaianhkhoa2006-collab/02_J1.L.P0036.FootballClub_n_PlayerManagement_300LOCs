@@ -115,7 +115,7 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
                                            .setClubName(clubName)
                                            .setSponsorBrand(sponsorBrand)
                                            .setBudget(budget);
-             
+             super.setSaveStatus(true);
              super.add(clubId.toUpperCase(), club);
         }
         

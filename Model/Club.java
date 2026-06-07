@@ -99,7 +99,7 @@ public class Club {
     }
     
     public String toSaveString(){
-        return clubId+", "+clubName+", "+sponsorBrand+", "+budget;
+        return clubId+", "+clubName+", "+sponsorBrand+", "+String.format("%.0f", budget);
     }
 
     public static Club createNewClub(){
