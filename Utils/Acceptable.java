@@ -13,9 +13,9 @@ public interface Acceptable {
        
        public final String  PLAYER_NAME_VALID  = "^[\\p{L} ]{2,}$"    ;
        
-       public final String  CLUB_NAME_VALID = "^[\\p{L} 0-9]+$"; 
+       public final String  CLUB_NAME_VALID = "^(?![0-9]+)[\\p{L} 0-9]+$"; 
        
-       public final String  SPONSOR_BRAND_VALID = "^[\\p{L} 0-9-,$._]+$";
+       public final String  SPONSOR_BRAND_VALID = "^(?![0-9]+)[\\p{L} 0-9-,$._]+$";
        
        public final String  DOUBLE_VALID = "^([-])?\\d+([.,]\\d+)?$"  ;
        

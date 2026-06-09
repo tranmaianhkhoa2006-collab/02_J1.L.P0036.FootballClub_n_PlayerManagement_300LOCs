@@ -27,14 +27,13 @@ public enum OptionProcessor {
                         MenuContainer.getInstance().createYesNoMenu().getMenu(), 
                         MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER));
                 
-              switch(Inputter.inputInteger("Input your choice: ", "Invalid choice!",0, 1)){
+              switch(Inputter.inputInteger("Would you like to save data before leaving?!\nInput your choice: ", "Invalid choice!",0, 1)){
                     case -1:                        
                     case 1:
                         return;
                 }
                 
-                playerManager.saveData();
-                clubManager.saveData();
+                OptionProcessor.SAVE_DATA.processOption(playerManager, clubManager);
             }
         }
     },

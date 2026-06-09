@@ -1,7 +1,6 @@
 package Model;
 
 import Utils.ViewHandler;
-import java.util.TreeMap;
 
 /**
  *
@@ -12,7 +11,7 @@ public class Club {
     private String clubName;
     private String sponsorBrand;
     private double budget;
-    private TreeMap<Integer,String> dataOfShirtNumber = new TreeMap<>();
+   
     
     public String getClubId() {
         return clubId;
@@ -50,10 +49,6 @@ public class Club {
         return this;
     }
     
-    public int getNumberOfPlayer(){
-        return this.dataOfShirtNumber.size();
-    }
-    
     //Only 9 bucket from (0->8) in hashTable
     @Override
     public int hashCode() {
@@ -68,38 +63,13 @@ public class Club {
        
        return false;
     }
-
-    public boolean addShirtNumber(int number,String id){
-       if(!this.dataOfShirtNumber.containsKey(number)){
-            this.dataOfShirtNumber.put(number, id);
-            return true;
-       }
-       return false;
-    }
-
-    public boolean deleteShirtNumber(int shirtNumber){
-        return this.dataOfShirtNumber.remove(shirtNumber)!=null;
-    }
-      
-    public boolean isContainShirtNumber(int number){
-        return this.dataOfShirtNumber.containsKey(number);
-    }
     
-    public boolean updateShirtNumber(int oldNums, int newNums){
-        if(this.dataOfShirtNumber.containsKey(oldNums)){
-                String thisPlayerID = this.dataOfShirtNumber.remove(oldNums);
-                return this.addShirtNumber(newNums, thisPlayerID);
-         }
-        return false;
-    }
-    
+    @Override
     public String toString(){
         return "Club ID: "+this.clubId+"\n"+
                    "Club name: "+this.clubName+"\n"+
                    "Sponsor Brand: "+this.sponsorBrand+"\n"+
-                   "Budget: "+this.budget+"\n"+
-                   "Numbers of Players: "+this.getNumberOfPlayer();
-        
+                   "Budget: "+this.budget+"\n";     
     }
     
     public String toSaveString(){

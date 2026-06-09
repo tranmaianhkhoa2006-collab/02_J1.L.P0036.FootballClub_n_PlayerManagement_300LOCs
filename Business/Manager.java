@@ -28,7 +28,7 @@ public abstract class Manager<E> implements ExistIDChecker{
         
         isAddSuccess = dataManager.put(id.toUpperCase(), data)==null;
         if(isAddSuccess)
-            saveStatus = !isAddSuccess;
+            saveStatus = false;
         
         return isAddSuccess;
     }

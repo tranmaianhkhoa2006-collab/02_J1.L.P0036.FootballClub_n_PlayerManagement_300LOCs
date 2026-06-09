@@ -1,13 +1,13 @@
 package Business;
 
 import Model.Club;
-import Model.Player;
 import Utils.ComparatorContainer;
 import Utils.FileIOHandler;
 import Utils.ViewHandler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class ClubManager extends Manager<Club> implements ClubAndPlayerConnection{
     private final String PATH_FILE = "data/clubs.txt";
+    private HashMap<String, HashMap<Integer,String>> dataOfShirtNumber = new HashMap<>();
     
     public final static String TABLE_HEADER =
             ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH)+
@@ -41,7 +42,7 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
                             club.getClubName(), 
                             club.getSponsorBrand(),
                             club.getBudget()+"",
-                            club.getNumberOfPlayer()+""
+                            dataOfShirtNumber.get(club.getClubId()).size()+""
                     )+
                     ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH)
             );
@@ -150,43 +151,54 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
 
     @Override
     public boolean addShirtNumber(String clubId,String playerId, int nums) {
-       Club club = super.search(clubId);
- 
-       if(club==null)
-           return false;
-       
-       if(club.addShirtNumber(nums,playerId))
-            return super.update(clubId, club);
-       else 
-           return false;
+        HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId);
+        if(currentShirtNumberData==null)
+            return false;
+        
+        if(currentShirtNumberData.containsKey(nums))
+            return false;
+        
+        currentShirtNumberData.put(nums, playerId);
+        return true;
     }
 
     @Override
     public boolean updateShirtNumber(String clubId, int oldNums, int newNums) {
-        Club club = super.search(clubId);
-        if(club == null)
+         HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId);
+        if(currentShirtNumberData==null)
             return false;
         
-        return club.updateShirtNumber(oldNums, newNums);
+        if(!currentShirtNumberData.containsKey(oldNums))
+            return false;
+        
+        if(currentShirtNumberData.containsKey(newNums))
+            return false;
+         
+         currentShirtNumberData.put(newNums, currentShirtNumberData.get(oldNums));
+         currentShirtNumberData.remove(oldNums);
+       
+         return true;
     }
-
+    
     @Override
     public boolean deleteShirtNumber(String clubId, int nums) {
-        Club club = super.search(clubId); 
-        if(club == null)
+        HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId);
+        if(currentShirtNumberData==null)
             return false;
         
-        return club.deleteShirtNumber(nums);
+        if(!currentShirtNumberData.containsKey(nums))
+            return false;
+        
+        return dataOfShirtNumber.remove(nums)!=null;
     }
     
     @Override
     public boolean isContainShirtNumber(String clubId, int nums) {
-        Club club = this.search(clubId);
-        if(club ==null)
+          HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId);
+        if(currentShirtNumberData==null)
             return false;
         
-        return club.isContainShirtNumber(nums);
-        
+        return currentShirtNumberData.containsKey(nums);
     }
     
     
