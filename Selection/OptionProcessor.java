@@ -22,7 +22,7 @@ public enum OptionProcessor {
     SAVE_BEFORE_EXITING_PROGRAM {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            if(playerManager.getSaveStatus()|| clubManager.getSaveStatus()){
+            if(!playerManager.getSaveStatus()|| !clubManager.getSaveStatus()){
                 ViewHandler.displayMenu(
                         MenuContainer.getInstance().createYesNoMenu().getMenu(), 
                         MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER));

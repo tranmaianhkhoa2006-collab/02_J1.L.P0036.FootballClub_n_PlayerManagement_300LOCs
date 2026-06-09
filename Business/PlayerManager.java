@@ -58,7 +58,7 @@ public class PlayerManager extends Manager<Player>{
     public Collection<Player> searchByName(String name){
         List<Player> filterData = new ArrayList<>();
         for(Player player: this.sortByComparator()){
-            if(Acceptable.isPartialEqual(player.getPlayerName(), name)){
+            if(Acceptable.isPartialEqual(name,player.getPlayerName())){
                 filterData.add(player);
             }
         }

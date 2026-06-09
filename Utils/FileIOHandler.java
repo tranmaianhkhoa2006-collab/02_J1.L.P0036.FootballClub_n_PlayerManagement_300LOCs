@@ -20,7 +20,7 @@ public class FileIOHandler {
 
     public static void logWriter(String mess) {
         try (
-                FileWriter fileWriter = new FileWriter(FileIOHandler.LOG_PATH);
+                FileWriter fileWriter = new FileWriter(FileIOHandler.LOG_PATH,true);
                 BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
               )
         {

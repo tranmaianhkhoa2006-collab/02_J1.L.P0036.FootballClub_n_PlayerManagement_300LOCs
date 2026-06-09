@@ -35,11 +35,12 @@ public interface Acceptable {
        public static boolean isPartialEqual(String firstString,String secondString){
            //If both string are equal return true;
            if(firstString.equals(secondString))
-               return firstString.equals(secondString);
+               return true;
+           if(firstString.length()>secondString.length())
+               return false;
            
            boolean isPartialEqualString = 
-                   firstString.toLowerCase().contains(secondString.toLowerCase()) || 
-                   secondString.toLowerCase().contains(firstString.toLowerCase());
+                   firstString.toLowerCase().contains(secondString.toLowerCase());
            
            return isPartialEqualString;
        }
