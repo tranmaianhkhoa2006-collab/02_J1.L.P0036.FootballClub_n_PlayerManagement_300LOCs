@@ -9,7 +9,7 @@ import Business.ExistIDChecker;
  * @author admin
  */
 public interface Acceptable {
-       public final String  PLAYER_ID_VALID  = "^[Pp]((000[1-9])|([1-9]{3}[0-9]))$"    ;
+       public final String  PLAYER_ID_VALID  = "^(?i)P(?!0{4})\\d{4}$"    ;
        
        public final String  PLAYER_NAME_VALID  = "^[\\p{L} ]{2,}$"    ;
        
@@ -21,7 +21,7 @@ public interface Acceptable {
        
        public final String  INTEGER_VALID = "^\\d+$";
        
-       public final String  CLUB_ID_VALID = "^[Cc][Ll]-(000[1-9])|([1-9]{3}[0-9])$";
+       public final String  CLUB_ID_VALID = "(?i)CL-(?!0{4})\\d{4}";
        
      
        public static boolean isValid(String data, String pattern){   

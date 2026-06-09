@@ -22,25 +22,27 @@ public class Inputter {
         boolean isValidString = true;
         int count=0;
          do{
-       
-                count++;
-            
-               if(count>3){
-                   ViewHandler.displayMenu(MenuContainer.getInstance().createYesNoMenu().getMenu(),MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER));
+               boolean isMoreThanThreeAttempt=(++count)>3;
+               if(isMoreThanThreeAttempt){
+                   ViewHandler.displayMenu(
+                           MenuContainer.getInstance().createYesNoMenu().getMenu(),
+                           MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
+                   );
                    int choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
-                   if(choice == 0){
-                       count = 0;
-                   }
-                   else if(choice == 1){
-                       return null;
+                   switch(choice){
+                       case 0:
+                           count=0;
+                           break;
+                       default:
+                           return null;
                    }
                }
             
             returnValue = inputString(mess);
-            
+       
             isValidString = Acceptable.isValid(returnValue, pattern);
                     
-            if(!isValidString && count <=3)
+            if(!isValidString && !isMoreThanThreeAttempt)
                    ViewHandler.printError(errorMess+"\n");
              
         }
@@ -49,41 +51,35 @@ public class Inputter {
          return returnValue;
      }
      
-     public static String inputStringAndLoopForUpdate(String mess, String errorMess, String pattern){
+     public static String inputStringAndLoopForUpdate(String mess, String errorMess, String pattern) {
         String returnValue;
         boolean isValidString = true;
         int count = 0;
-         do{
-       
-                count++;
-            
-              if (count > 3) {
-                 ViewHandler.displayMenu(
-                         MenuContainer.getInstance().createYesNoMenu().getMenu(),
-                         MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
-                 );
-                 int choice = -1;
-                 while (choice != 0 && choice != 1) {
-                     choice = inputInteger("Do you want of continue?: ", "Invalid choice, please enter again!", 0, 1);
-                     switch (choice) {
-                         case 0:
-                             count = 0;
-                             break;
-                         case 1:
-                             return null;
-                         default:
-                     }
+        do {
+            boolean isMoreThanThreeAttempt = (++count) > 3;
+            if (isMoreThanThreeAttempt) {
+                ViewHandler.displayMenu(
+                        MenuContainer.getInstance().createYesNoMenu().getMenu(),
+                        MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
+                );
+                int choice = inputInteger("Do you want of continue?: ", "Invalid choice, please enter again!", 0, 1);
+                switch (choice) {
+                    case 0:
+                        count = 0;
+                        break;
+                    default:
+                        return null;
+                }
 
-                 }
-             }
-               
+            }
+            ViewHandler.print("Enter to skip!");
             returnValue = inputString(mess);
             if(returnValue.isEmpty())
                 return null;
             
             isValidString = Acceptable.isValid(returnValue, pattern);
                     
-            if(!isValidString && count <=3)
+            if(!isValidString && isMoreThanThreeAttempt)
                    ViewHandler.printError(errorMess+"!\n");
              
         }
@@ -119,7 +115,7 @@ public class Inputter {
                    );
                    
                    int choice=-1;
-               while(choice !=0 || choice !=1){
+               while(choice !=0 && choice !=1){
                    choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
                    switch(choice){
                             case 0:
@@ -163,27 +159,27 @@ public class Inputter {
          return returnValue;
      }
      
-     public static PlayerType inputPlayerType(String mess){
-         PlayerType type;
-         int count=0;
-         do{
-             count++;
-               
-            
-               if(count>3){
-                   ViewHandler.displayMenu(
-                           MenuContainer.getInstance().createYesNoMenu().getMenu(),
-                           MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
-                   );
-                   
-                   int choice = inputInteger("Do you want of continue?: ","Invalid choice, please enter again!",0, 1);
-                  
-                   if(choice == 1)
-                       return null;
-                   else
-                       count = 0;
+    public static PlayerType inputPlayerType(String mess) {
+        PlayerType type;
+        int count = 0;
+        do {
+            boolean isMoreThanThreeAttempt = (++count) > 3;
+            if (isMoreThanThreeAttempt) {
+                ViewHandler.displayMenu(
+                        MenuContainer.getInstance().createYesNoMenu().getMenu(),
+                        MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER)
+                );
+                int choice = inputInteger("Do you want of continue?: ", "Invalid choice, please enter again!", 0, 1);
+                switch (choice) {
+                    case 0:
+                        count = 0;
+                        break;
+                    default:
+                        return null;
                 }
-             
+
+            }
+        
              type = PlayerType.searchPlayerType(inputString(mess));
              
              if(type == null)

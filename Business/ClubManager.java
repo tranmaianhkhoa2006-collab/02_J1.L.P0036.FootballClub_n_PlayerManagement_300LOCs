@@ -1,6 +1,7 @@
 package Business;
 
 import Model.Club;
+import Model.Player;
 import Utils.ComparatorContainer;
 import Utils.FileIOHandler;
 import Utils.ViewHandler;
@@ -47,10 +48,10 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
         }
     }
       
-    public Collection<Club> filterByBudgetValue(double value){
+    public Collection<Club> filterByBudgetValue(double maxBudget){
         List<Club> returnData = new ArrayList<>();
         for(Club club: this.sortByComparator()){
-            if(club.getBudget()<=value)
+            if(club.getBudget()<=maxBudget)
                 returnData.add(club);
         }
         
@@ -60,9 +61,14 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
     //block from delete club by controller
     @Override
     public boolean remove(String id){
-        ViewHandler.printError("Club can not be deleted!\n");
-        return false;
-    }
+       try{ 
+         throw new UnsupportedOperationException("Clubs cannot be deleted");
+       }
+       catch(UnsupportedOperationException e){
+           FileIOHandler.logWriter(e+"-"+e.getMessage());
+       }
+       return false;
+ }
     
     public Collection<Club> sortByComparator (){
          List<Club> filterData = new ArrayList<>(super.getReadOnlyManagerList());
@@ -89,19 +95,20 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
     }
 
     @Override
-    public boolean loadData() {
+    public boolean loadData(){
       List<String> rawStringOfClubs = FileIOHandler.readStringFile(this.getPathFile());
+      List<Club> tempLoadData = new ArrayList<>();
         if(rawStringOfClubs.isEmpty())
             return false;
         
         for(String rawStringClub : rawStringOfClubs){
              String[] pieceOfClubInfo = rawStringClub.split(",");
              
+             if (pieceOfClubInfo.length < 4) return false;
+             
              for(String pieceInfo : pieceOfClubInfo){
                  if(pieceInfo.isEmpty()){
-                     super.clear();
                      return false;
-                     
                  }
              }
               
@@ -115,10 +122,16 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
                                            .setClubName(clubName)
                                            .setSponsorBrand(sponsorBrand)
                                            .setBudget(budget);
-             super.setSaveStatus(true);
-             super.add(clubId.toUpperCase(), club);
+             
+             tempLoadData.add(club);
         }
         
+        super.clear();
+        for(Club club: tempLoadData){
+            super.add(club.getClubId(), club);
+        }
+        
+        super.setSaveStatus(true);
         return true;
     }
     
@@ -129,13 +142,19 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
    
     @Override
     public String getClubName(String clubId) {
-        return super.search(clubId.toUpperCase()).getClubName();
+        Club club = super.search(clubId.toUpperCase());
+        if(club == null)
+            return "Not exist club";
+        return club.getClubName();
     }
 
     @Override
     public boolean addShirtNumber(String clubId,String playerId, int nums) {
        Club club = super.search(clubId);
  
+       if(club==null)
+           return false;
+       
        if(club.addShirtNumber(nums,playerId))
             return super.update(clubId, club);
        else 
@@ -154,6 +173,9 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
     @Override
     public boolean deleteShirtNumber(String clubId, int nums) {
         Club club = super.search(clubId); 
+        if(club == null)
+            return false;
+        
         return club.deleteShirtNumber(nums);
     }
     

@@ -81,7 +81,7 @@ public class MenuContainer {
      public MenuContainer createYesNoMenu(){
           menuOption.clear();
           menuOption.add("Yes");
-          menuOption.add("No");
+          menuOption.add("No (Can choose -1 or 1)");
           return menuContainerInstance;
      }
      

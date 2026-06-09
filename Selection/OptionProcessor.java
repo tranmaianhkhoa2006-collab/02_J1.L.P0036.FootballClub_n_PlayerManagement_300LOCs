@@ -12,6 +12,7 @@ import Utils.MenuContainer;
 import Utils.ViewHandler;
 import static Utils.Inputter.inputInteger;
 import Business.ClubAndPlayerConnection;
+import Utils.FileIOHandler;
 
 /**
  *
@@ -483,14 +484,21 @@ public enum OptionProcessor {
     LOAD_DATA {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-           boolean isLoadSuccess ;  
-           isLoadSuccess =  ((ClubManager)clubManager).loadData() &&((PlayerManager)playerManager).loadData();
-          
-           if(isLoadSuccess)
-             ViewHandler.print("Load data successfully!\n");
-             
-           else
-             ViewHandler.print("Load data failed!\n");
+            try {                
+                boolean isLoadSuccess;                
+                isLoadSuccess = clubManager.loadData() && playerManager.loadData();
+                
+                if (isLoadSuccess) {
+                    ViewHandler.print("Load data successfully!\n");
+                } 
+                else {
+                    ViewHandler.print("Load data failed!\n");
+                }
+            } 
+            catch (NumberFormatException | NullPointerException e) {
+                ViewHandler.printError("Load data failed!\n");
+                FileIOHandler.logWriter(e + "-" + e.getMessage());
+            }
         }
     };
     
@@ -498,6 +506,9 @@ public enum OptionProcessor {
     public abstract void processOption(Manager<Player> playerManager, Manager<Club> clubManager);
 
     public static OptionProcessor get(int option){
+        if(!(option<=OptionProcessor.values().length && option>=0))
+            return null;
+        
         return OptionProcessor.values()[option];
     }
 }

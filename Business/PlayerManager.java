@@ -98,29 +98,33 @@ public class PlayerManager extends Manager<Player>{
     }
      
     @Override
-    public boolean saveData() {
+    public boolean saveData(){
        Collection<Player> filterData = sortByComparator(ComparatorContainer.sortAscendingByIdForPlayers);
        List<String> listOfStringToSave = new ArrayList();
        for(Player player : filterData){
            listOfStringToSave.add(player.toSaveString());
        }
        
-       return FileIOHandler.writeStringFile(this.getPathFile(), listOfStringToSave);
-       
+     
+       boolean isSaveSuccess = FileIOHandler.writeStringFile(this.getPathFile(), listOfStringToSave);
+       super.setSaveStatus(isSaveSuccess);
+       return isSaveSuccess;
     }
 
     @Override
-    public boolean loadData() {
+    public boolean loadData(){
         List<String> rawStringOfPlayers = FileIOHandler.readStringFile(this.getPathFile());
+        List<Player> tempLoadData = new ArrayList<>();
         if(rawStringOfPlayers.isEmpty())
             return false;
         
         for(String rawStringlayer : rawStringOfPlayers){
              String pieceOfPlayerInfo[] = rawStringlayer.split(",");
              
+             if (pieceOfPlayerInfo.length < 5) return false;
+             
              for(String pieceInfo : pieceOfPlayerInfo){
                  if(pieceInfo.isEmpty()){
-                     super.clear();
                      return false;
                  }
              }
@@ -137,10 +141,16 @@ public class PlayerManager extends Manager<Player>{
                                                                               .setPlayerName(playerName)
                                                                               .setClubId(playerClubId)
                                                                               .setShirtNumber(shirtNumber);
-             super.setSaveStatus(true);
-             super.add(playerId, player);
+          
+             tempLoadData.add(player);
         }
         
+        super.clear();
+        for(Player player: tempLoadData){
+            super.add(player.getPlayerId(), player);
+        }
+        
+        super.setSaveStatus(true);
         return true;
     }
 }

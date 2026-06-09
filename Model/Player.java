@@ -3,6 +3,7 @@ package Model;
 import Selection.PlayerType;
 import Utils.ViewHandler;
 import Business.ClubAndPlayerConnection;
+import Utils.FileIOHandler;
 
 /**
  *
@@ -17,6 +18,10 @@ public abstract class Player {
 
 
     public Player(){
+        playerId = "";
+        playerName="";
+        clubId="";
+        shirtNumber=0;
     }
     
     
@@ -55,22 +60,29 @@ public abstract class Player {
     public Player setShirtNumber(int shirtNumber) {
         //Player need to link with Club Manager through interface
         boolean isClubApiLink = (apiClubManager !=null);
-     
+        if(!isClubApiLink){
+            FileIOHandler.logWriter("API MISSING!");
+            ViewHandler.printError("Something occur during set shirt number!\nPlease contact dev for support\n");
+            return this;
+        }
         
-       if(isClubApiLink){
-            if(this.shirtNumber == 0 && !this.clubId.isEmpty()){
+        boolean isFirstTimeSetShirtNumber = this.shirtNumber == 0 && !this.clubId.isEmpty();
+       
+        if(isFirstTimeSetShirtNumber){
                 this.apiClubManager.addShirtNumber(clubId,playerId, shirtNumber);
                 this.shirtNumber = shirtNumber;
                 return this;
-            }//set for first time case 
+       }//set for first time case 
 
             //if club update success? set shirtNumber
-            else{
-                 if(apiClubManager.updateShirtNumber(this.clubId, this.shirtNumber, shirtNumber))
+        else{
+            boolean isUpdatedShirtNumberInClubSuccess = apiClubManager.updateShirtNumber(this.clubId, this.shirtNumber, shirtNumber);
+                 
+            if(isUpdatedShirtNumberInClubSuccess)
                      this.shirtNumber = shirtNumber;
              }
             //set for remaininng time
-       }
+       
         return this;
     }
 

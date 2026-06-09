@@ -70,10 +70,11 @@ public class Club {
     }
 
     public boolean addShirtNumber(int number,String id){
-    
+       if(!this.dataOfShirtNumber.containsKey(number)){
             this.dataOfShirtNumber.put(number, id);
             return true;
-        
+       }
+       return false;
     }
 
     public boolean deleteShirtNumber(int shirtNumber){
@@ -85,8 +86,11 @@ public class Club {
     }
     
     public boolean updateShirtNumber(int oldNums, int newNums){
+        if(this.dataOfShirtNumber.containsKey(oldNums)){
                 String thisPlayerID = this.dataOfShirtNumber.remove(oldNums);
                 return this.addShirtNumber(newNums, thisPlayerID);
+         }
+        return false;
     }
     
     public String toString(){

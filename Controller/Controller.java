@@ -8,6 +8,7 @@ import Model.Player;
 import Selection.ManagerType;
 import Selection.MenuHeaderType;
 import Selection.OptionProcessor;
+import Utils.FileIOHandler;
 import Utils.Inputter;
 import Utils.MenuContainer;
 import Utils.ViewHandler;
@@ -51,18 +52,24 @@ public class Controller {
     }
     
     public void processOption(int option){
-        int optionOfLoadData = MenuContainer.getInstance().getNumberOfOptions()-1;
-        
-        //InputInteger(min->max) can return min - 1 
-        if(option==-1){
-            ViewHandler.printError("Invalid choice!\n");
-            return;
-        }
-        else if(option == optionOfLoadData){
-                clubManager = Manager.getNewManagerList(ManagerType.CLUB_MANAGER);
-                playerManager = Manager.getNewManagerList(ManagerType.PLAYER_MANAGER);
-                ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
-        }
-        OptionProcessor.get(option).processOption(playerManager, clubManager);
+            int optionOfLoadData = MenuContainer.getInstance().getNumberOfOptions()-1;
+
+            //InputInteger(min->max) can return min - 1 
+            if(option==-1){
+                ViewHandler.printError("Invalid choice!\n");
+                return;
+            }
+            else if(option == optionOfLoadData){
+                    clubManager = Manager.getNewManagerList(ManagerType.CLUB_MANAGER);
+                    playerManager = Manager.getNewManagerList(ManagerType.PLAYER_MANAGER);
+                    ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
+            }
+          try{
+            OptionProcessor.get(option).processOption(playerManager, clubManager);
+          }
+          catch(ArrayIndexOutOfBoundsException e){
+              ViewHandler.printError("Wrong option!");
+              FileIOHandler.logWriter("Wrong option!");
+          }
     } 
 }

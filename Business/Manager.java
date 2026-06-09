@@ -23,7 +23,7 @@ public abstract class Manager<E> implements ExistIDChecker{
     
     public boolean add(String id,E data){
         boolean isAddSuccess;
-        if(dataManager.containsKey(id))
+        if(this.containId(id))
             return false;
         
         isAddSuccess = dataManager.put(id.toUpperCase(), data)==null;
@@ -37,7 +37,7 @@ public abstract class Manager<E> implements ExistIDChecker{
     
     public boolean update(String id,E data){
        
-        if(dataManager.containsKey(id.toUpperCase())){
+        if(this.containId(id)){
             saveStatus = false;
             return dataManager.put(id.toUpperCase(), data)!=null;
         }
@@ -58,7 +58,7 @@ public abstract class Manager<E> implements ExistIDChecker{
     
     public abstract boolean saveData();
     
-    public abstract boolean loadData();
+    public abstract boolean loadData() throws NullPointerException, NumberFormatException;
     
     @Override
     public boolean containId(String id){
