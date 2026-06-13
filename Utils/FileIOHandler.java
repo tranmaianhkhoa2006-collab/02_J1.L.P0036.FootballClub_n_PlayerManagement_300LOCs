@@ -64,6 +64,9 @@ public class FileIOHandler {
         
         
         boolean isSave = false;
+
+        if(!(new File(pathFile)).exists())
+            return false;
         try (
                 FileWriter fileWriter = new FileWriter(pathFile);
                 BufferedWriter bufferWriter = new BufferedWriter(fileWriter);

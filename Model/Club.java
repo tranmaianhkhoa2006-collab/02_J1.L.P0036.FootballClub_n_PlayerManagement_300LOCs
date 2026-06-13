@@ -27,7 +27,7 @@ public class Club {
     }
 
     public Club setClubName(String clubName) {
-        this.clubName = ViewHandler.nameFormatter(clubName);
+        this.clubName =clubName;
         return this;
     }
 

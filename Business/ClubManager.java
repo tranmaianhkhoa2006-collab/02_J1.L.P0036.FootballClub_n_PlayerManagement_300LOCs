@@ -20,8 +20,16 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
     
     public final static String TABLE_HEADER =
             ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH)+
-            ViewHandler.attributeOfClubList("Club ID", "Club name","Sponsor Brand","Budget","Numbers of players")+
+            ViewHandler.attributeOfClubList("Club ID", "Club name","Sponsor Brand","Budget(Million dola)","Numbers of players")+
             ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH); 
+    
+    @Override
+    public boolean add(String id, Club club){
+        boolean isAddSuccess =  super.add(id, club);
+        isAddSuccess &= dataOfShirtNumber.put(id, new HashMap<Integer,String>())==null;
+        return isAddSuccess;
+    }
+    
     @Override
     public void show() {
         
@@ -41,7 +49,7 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
                             club.getClubId(), 
                             club.getClubName(), 
                             club.getSponsorBrand(),
-                            club.getBudget()+"",
+                            String.format("%.0f",club.getBudget()),
                             dataOfShirtNumber.get(club.getClubId()).size()+""
                     )+
                     ViewHandler.lineBreak(ViewHandler.CLUB_TABLE_LENGTH)
@@ -129,7 +137,7 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
         
         super.clear();
         for(Club club: tempLoadData){
-            super.add(club.getClubId(), club);
+            this.add(club.getClubId(), club);
         }
         
         super.setSaveStatus(true);
@@ -149,6 +157,7 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
         return club.getClubName();
     }
 
+    
     @Override
     public boolean addShirtNumber(String clubId,String playerId, int nums) {
         HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId);
@@ -185,16 +194,13 @@ public class ClubManager extends Manager<Club> implements ClubAndPlayerConnectio
         HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId);
         if(currentShirtNumberData==null)
             return false;
-        
-        if(!currentShirtNumberData.containsKey(nums))
-            return false;
-        
-        return dataOfShirtNumber.remove(nums)!=null;
+     
+        return currentShirtNumberData.remove(nums)!=null;
     }
     
     @Override
     public boolean isContainShirtNumber(String clubId, int nums) {
-          HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId);
+         HashMap<Integer, String> currentShirtNumberData = dataOfShirtNumber.get(clubId.toUpperCase());
         if(currentShirtNumberData==null)
             return false;
         

@@ -22,17 +22,7 @@ public enum OptionProcessor {
     SAVE_BEFORE_EXITING_PROGRAM {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            if(!playerManager.getSaveStatus()|| !clubManager.getSaveStatus()){
-                ViewHandler.displayMenu(
-                        MenuContainer.getInstance().createYesNoMenu().getMenu(), 
-                        MenuContainer.getHeader(MenuHeaderType.YES_NO_MENU_HEADER));
-                
-              switch(Inputter.inputInteger("Would you like to save data before leaving?!\nInput your choice: ", "Invalid choice!",0, 1)){
-                    case -1:                        
-                    case 1:
-                        return;
-                }
-                
+            if(!playerManager.getSaveStatus() || !clubManager.getSaveStatus()){                
                 OptionProcessor.SAVE_DATA.processOption(playerManager, clubManager);
             }
         }
@@ -100,8 +90,7 @@ public enum OptionProcessor {
     SEARCH_FOR_CLUB_ID {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            String clubId = Inputter.inputStringAndLoop("Input id to search: ",
-                    "Please enter a valid club id!\nFormat : CL-XXXX Where X is a number from 0 -> 9", Acceptable.CLUB_ID_VALID);
+            String clubId = Inputter.inputString("Input id to search: ");
             
             if (clubId == null) {
                 return;
@@ -127,8 +116,7 @@ public enum OptionProcessor {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
             while (true) {
-                String clubId = Inputter.inputStringAndLoop("Input club id: ",
-                        "Please enter a valid club id!\nFormat : CL-XXXX Where X is a number from 0 -> 9", Acceptable.CLUB_ID_VALID);
+                String clubId = Inputter.inputString("Input club id: ");
                 if (clubId == null) {
                     return;
                 }
@@ -175,6 +163,7 @@ public enum OptionProcessor {
                         case 4:
                             return;
                         case 5:
+                            clubManager.update(tempClub.getClubId(), tempClub);
                             break;
                         default:
                             ViewHandler.printError("Invalid choice!\n");
@@ -183,9 +172,13 @@ public enum OptionProcessor {
                     Inputter.inputString("Press enter to continue!\n");
                     ViewHandler.fakeClearScreen();
                     
-                    if(choice == MenuContainer.getInstance().getNumberOfOptions()-1)
+                    if(choice == 5){
+                        clubManager.setSaveStatus(false);
                         break;
-                        
+                    }
+                    
+                    if(choice == 0)
+                         clubManager.setSaveStatus(false); 
                  
                 }
             }
@@ -193,8 +186,9 @@ public enum OptionProcessor {
         }
 
         public void updateClubName(Club club) {
+            ViewHandler.print("Valid name: Need to contain atleast 1 character, No special character\n");
             String newName = Inputter.inputStringAndLoopForUpdate("Input new club name: ",
-            "Please enter a valid club id!\nFormat : CL-XXXX Where X is a number from 0 -> 9", Acceptable.CLUB_NAME_VALID);
+            "Please enter a valid club name!\n", Acceptable.CLUB_NAME_VALID);
             
             if (newName == null) {
                 return;
@@ -217,11 +211,12 @@ public enum OptionProcessor {
         }
 
         public void updatebudget(Club club) {
-            ViewHandler.print("If you change your mind, please press -1 and press enter\n");
-            double newBudget = Inputter.inputDouble("Input new budget: ",0,
+            ViewHandler.print("If you change your mind, please press 0 and press enter\n");
+            
+                double newBudget = Inputter.inputDouble("Input new budget: ",1,
                     "Please enter a valid budget!" );
             
-            if (newBudget == -1) {
+            if (newBudget == 0) {
                 return;
             }
 
@@ -263,8 +258,7 @@ public enum OptionProcessor {
            
                 PlayerManager tempCastingManager = (PlayerManager) playerManager;
                 
-                String searchName = Inputter.inputStringAndLoop("Input name (partial or full) to search: ",
-                        "Please enter a valid name or partial name (Atleast 2 characters)", Acceptable.PLAYER_NAME_VALID);
+                String searchName = Inputter.inputString("Input name (partial or full) to search: ");
                 
                 if(searchName == null)
                     return;
@@ -276,11 +270,18 @@ public enum OptionProcessor {
     ADD_PLAYER {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
+            
+            //can not add player when there is no club.
+            if(clubManager.getReadOnlyManagerList().isEmpty()){
+                ViewHandler.printError("Please add club before adding new players");
+                return;
+            }
+            
             String id = Inputter.inputStringAndLoop("Input ID(Format: PXXXX (XXXX is from 0001-9999)): ","Invalid format!", Acceptable.PLAYER_ID_VALID);
             if(id == null)
                 return;
             else if(Acceptable.checkExistID(id, playerManager)){
-                ViewHandler.printError("This id already exists!\n");
+                ViewHandler.printError("This player ID already exists!\n");
                 return;
             }
             
@@ -289,19 +290,22 @@ public enum OptionProcessor {
             if(name == null)
                 return;
             
+            ViewHandler.print(String.format("%-"+ViewHandler.CLUB_TABLE_LENGTH+"s","Club List"));
+            clubManager.show();
             String clubId = Inputter.inputStringAndLoop("Input club id(Format: CL-XXXX | XXXX is from 0001-9999): ", "Invalid club id format", Acceptable.CLUB_ID_VALID);
             if(clubId == null)
                 return;
             else if(!Acceptable.checkExistID(clubId, clubManager)){
-                ViewHandler.printError("This club is not exist!");
+                ViewHandler.printError("This club does not exist!");
                 return;
             }
             
             int shirtNumber=  Inputter.inputInteger("Input shirt number(1->99) or press 0 to return: ","Invalid shirt number!", 1, 99);
             if(shirtNumber == 0)
                 return;
-            else if(Acceptable.checkExistShirtNumber(clubId, shirtNumber, (ClubManager)clubManager)){
-               ViewHandler.printError("This number already exist in this club");
+            
+            if(Acceptable.checkExistShirtNumber(clubId, shirtNumber, (ClubManager)clubManager)){
+               ViewHandler.printError("This shirt number already exists in this club!\n");
                return;
             }
             
@@ -328,11 +332,11 @@ public enum OptionProcessor {
     REMOVE_PLAYER_BY_ID {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            String id = Inputter.inputStringAndLoop("Input id to delete: ", "Please input a valid id!", Acceptable.PLAYER_ID_VALID);
+            String id = Inputter.inputString("Input id to delete: ");
             if(id == null)
                 return;
             
-            Player player = playerManager.search(id);
+            Player player = playerManager.search(id.toUpperCase());
             if(player == null){
                 ViewHandler.print("This player does not exist!\n");
                 return;
@@ -395,6 +399,10 @@ public enum OptionProcessor {
                     ViewHandler.print("This player does not exist!");
                     return;
                 }
+             while(true){   
+                ViewHandler.print(ViewHandler.lineBreak(70));
+                ViewHandler.print(player.toString());
+                ViewHandler.print(ViewHandler.lineBreak(70));
                 
                 ViewHandler.displayMenu(
                         MenuContainer.getInstance().createUpdatePlayerMenu().getMenu(),
@@ -415,14 +423,22 @@ public enum OptionProcessor {
                     case 3:
                         player = updatePlayerShirtNumber(player);
                         break;
+             
                 }
-                if(choice != MenuContainer.getInstance().getNumberOfOptions()-1)
+                if(choice != 4)
                     playerManager.update(player.getPlayerId(), player);
-            }
+                
+                if(choice == 4)
+                    break;
+                    
+                Inputter.inputString("Enter to continue!");
+                ViewHandler.fakeClearScreen();
+              }
+           }
         }
         
         public Player updatePlayerName(Player player){
-            String name = Inputter.inputStringAndLoop("Input new name: ","Invalid name\nPlease enter again!", Acceptable.PLAYER_NAME_VALID);
+            String name = Inputter.inputStringAndLoopForUpdate("Input new name: ","Invalid name\nPlease enter again!", Acceptable.PLAYER_NAME_VALID);
             if(name==null)
                 return player;
             
@@ -431,7 +447,7 @@ public enum OptionProcessor {
         }
         
         public Player updatePlayerPosition(Player player){
-            PlayerType playerType = Inputter.inputPlayerType("Input position: ");
+            PlayerType playerType = Inputter.inputPlayerType("Player type: Defender, Winger, Forward, Goalkeeper, Midfielder\nInput position: ");
             if(playerType == null)
                 return player;
             
@@ -449,11 +465,19 @@ public enum OptionProcessor {
         
         public Player updatePlayerShirtNumber(Player player){
             int newShirtNumber = Inputter.inputInteger("Input new shirt number: ","Please input a valid shirt number!(1-99)", 1, 99);
+            if(newShirtNumber==0)
+                return player;
+            
+            if(newShirtNumber == player.getShirtNumber()){
+                ViewHandler.printError("This shirt number is this player current shirt number!\n");
+                return player;
+              }
             ClubAndPlayerConnection checker = player.getApiClubManager();
             if(Acceptable.checkExistShirtNumber(player.getClubId(), newShirtNumber, checker)){
                 ViewHandler.printError("This shirt number already exist in this club!\n");
                 return player;
-            }         
+            }
+            
             return player.setShirtNumber(newShirtNumber);
         }
     },
@@ -474,29 +498,43 @@ public enum OptionProcessor {
     SAVE_DATA {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-           clubManager.saveData();
-           playerManager.saveData();
-           ViewHandler.print("Save successfully");
+           if(playerManager.getReadOnlyManagerList().isEmpty() && clubManager.getReadOnlyManagerList().isEmpty()){
+               ViewHandler.printError("There is no data to save\n");
+               return;
+           }
+            
+           boolean isClubSaveSuccess = clubManager.saveData();
+           boolean isPlayerSaveSuccess = playerManager.saveData();
+           if(isClubSaveSuccess && isPlayerSaveSuccess){
+               ViewHandler.print("Save successfully\n");
+           }
+           else
+               ViewHandler.printError("Save unsuccessfully\nPlease contact developer for support");
         }
     },
      
     LOAD_DATA {
         @Override
         public void processOption(Manager<Player> playerManager, Manager<Club> clubManager) {
-            try {                
-                boolean isLoadSuccess;                
-                isLoadSuccess = clubManager.loadData() && playerManager.loadData();
-                
-                if (isLoadSuccess) {
+            try {                            
+                boolean isClubLoadSuccess = clubManager.loadData() ;
+                if(!isClubLoadSuccess)
+                    throw new IllegalArgumentException("LOAD FAILED TYPE: CLUB_MANAGER\n");
+                    
+                boolean isPlayerLoadSuccess = playerManager.loadData();
+                if(!isPlayerLoadSuccess)
+                    throw new IllegalArgumentException("LOAD FAILED TYPE: PLAYER_MANAGER\n");
+    
                     ViewHandler.print("Load data successfully!\n");
-                } 
-                else {
-                    ViewHandler.print("Load data failed!\n");
-                }
+                
             } 
             catch (NumberFormatException | NullPointerException e) {
                 ViewHandler.printError("Load data failed!\n");
                 FileIOHandler.logWriter(e + "-" + e.getMessage());
+            }
+            catch (IllegalArgumentException ex){
+                 ViewHandler.printError("Load data failed!\n");
+                FileIOHandler.logWriter(ex + "-" + ex.getMessage());
             }
         }
     };

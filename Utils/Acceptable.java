@@ -21,7 +21,7 @@ public interface Acceptable {
        
        public final String  INTEGER_VALID = "^\\d+$";
        
-       public final String  CLUB_ID_VALID = "(?i)CL-(?!0{4})\\d{4}";
+       public final String  CLUB_ID_VALID = "^(?i)CL-(?!0{4})\\d{4}";
        
      
        public static boolean isValid(String data, String pattern){   
@@ -36,13 +36,16 @@ public interface Acceptable {
            //If both string are equal return true;
            if(firstString.equals(secondString))
                return true;
-           if(firstString.length()>secondString.length())
-               return false;
+
            
-           boolean isPartialEqualString = 
+           boolean isFirstPartialEqualString = 
+                   secondString.toLowerCase().contains(firstString.toLowerCase());
+           
+           boolean isSecondPartialEqualString =
                    firstString.toLowerCase().contains(secondString.toLowerCase());
            
-           return isPartialEqualString;
+           return isFirstPartialEqualString || isSecondPartialEqualString;
+
        }
        
        public static boolean checkExistID(String id, ExistIDChecker checker){

@@ -45,7 +45,7 @@ public class MenuContainer {
         menuOption.add("Add a new club");
         menuOption.add("Search for a club by ID");
         menuOption.add("Update a club by ID");
-        menuOption.add("List of all clubs with budget ≤ input value");
+        menuOption.add("List of all clubs with budget <= input value");
         menuOption.add("List all players in ascending order of club names.if same,sort by shirt number ascending.");
         menuOption.add("Search players by partial player name");
         menuOption.add("Add a new player");

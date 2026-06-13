@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public abstract class Manager<E> implements ExistIDChecker{
     private HashMap<String, E> dataManager = new HashMap<>();
-    private boolean saveStatus;
+    private boolean saveStatus = true;
     
     public void setSaveStatus(boolean status){
         this.saveStatus = status;

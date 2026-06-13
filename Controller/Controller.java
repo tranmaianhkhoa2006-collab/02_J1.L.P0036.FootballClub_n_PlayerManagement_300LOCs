@@ -27,6 +27,9 @@ public class Controller {
     
     public Controller(){
         ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
+        clubManager.loadData();
+        playerManager.loadData();
+
     }
     
     public void startProgram(){
@@ -54,16 +57,17 @@ public class Controller {
     public void processOption(int option){
             int optionOfLoadData = MenuContainer.getInstance().getNumberOfOptions()-1;
 
-            //InputInteger(min->max) can return min - 1 
-            if(option==-1){
-                ViewHandler.printError("Invalid choice!\n");
-                return;
-            }
-            else if(option == optionOfLoadData){
-                    clubManager = Manager.getNewManagerList(ManagerType.CLUB_MANAGER);
-                    playerManager = Manager.getNewManagerList(ManagerType.PLAYER_MANAGER);
-                    ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
-            }
+                //InputInteger(min->max) can return min - 1 
+                if(option==-1){
+                    ViewHandler.printError("Invalid choice!\n");
+                    return;
+                }
+                else if(option == optionOfLoadData){
+                        clubManager = Manager.getNewManagerList(ManagerType.CLUB_MANAGER);
+                        playerManager = Manager.getNewManagerList(ManagerType.PLAYER_MANAGER);
+                        ((PlayerManager)playerManager).setApiClubManager((ClubManager) clubManager);
+                }
+
           try{
             OptionProcessor.get(option).processOption(playerManager, clubManager);
           }

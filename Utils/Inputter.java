@@ -55,7 +55,9 @@ public class Inputter {
         String returnValue;
         boolean isValidString = true;
         int count = 0;
+        ViewHandler.print("Enter to skip!\n");
         do {
+            
             boolean isMoreThanThreeAttempt = (++count) > 3;
             if (isMoreThanThreeAttempt) {
                 ViewHandler.displayMenu(
@@ -72,16 +74,16 @@ public class Inputter {
                 }
 
             }
-            ViewHandler.print("Enter to skip!");
+         
             returnValue = inputString(mess);
             if(returnValue.isEmpty())
                 return null;
             
             isValidString = Acceptable.isValid(returnValue, pattern);
                     
-            if(!isValidString && isMoreThanThreeAttempt)
+            if(!isValidString && !isMoreThanThreeAttempt)
                    ViewHandler.printError(errorMess+"!\n");
-             
+                
         }
         while(!isValidString);
          
@@ -144,7 +146,9 @@ public class Inputter {
          String returnValue;
        
             returnValue = inputStringAndLoop(mess,errorMess, Acceptable.DOUBLE_VALID);
-          
+            if(returnValue == null)
+                return 0;
+            
          return Double.parseDouble(returnValue);
      }
      
@@ -152,7 +156,7 @@ public class Inputter {
          double returnValue;
          do{
              returnValue = inputDouble(mess,errorMess);
-             if(returnValue== min-1)
+             if(returnValue == 0)
                  return min - 1;    
          }
          while(returnValue < min);
@@ -193,7 +197,14 @@ public class Inputter {
          int returnValue;
          boolean isValidChoice = false;
          do{
-              returnValue = Inputter.inputInteger(mess,"Please input number!");
+              String errorSubMess="";
+               if(MenuContainer.getInstance().getNumberOfOptions()!=14)
+                   errorSubMess+="Press "+(min-1)+" to skip";
+              
+              returnValue = Inputter.inputInteger(mess,"Please input number!\n"+errorSubMess);
+             
+                  
+                  
               isValidChoice = Acceptable.isDigitInRange(returnValue, min-1, max);
               
               if(!isValidChoice)

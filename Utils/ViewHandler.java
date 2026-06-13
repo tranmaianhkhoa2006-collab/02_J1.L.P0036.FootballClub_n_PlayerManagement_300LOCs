@@ -74,6 +74,8 @@ public class ViewHandler {
               returnValue.append(word.substring(0,1).toUpperCase()).append(word.substring(1)).append(" ");
           }
           
+         
+            
           return returnValue.toString().trim();
       
      }
